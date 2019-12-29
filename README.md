@@ -7,9 +7,13 @@ SSL
 
 ### Running The Server
 
-Navigate to the blog directory and run
+To run a local version of the server, navigate to the blog directory and run
 
     python -m flask run
+
+To expose the server to the whole world, run
+
+    python -m flask run --host=0.0.0.0 --port=80
 
 To enter debug mode (and subsequently enable hot reloading), set the `FLASK_ENV` value to `development`
 
