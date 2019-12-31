@@ -22,3 +22,7 @@ To enter debug mode (and subsequently enable hot reloading), set the `FLASK_ENV`
 ### Helpful Resources
 
     https://flask.palletsprojects.com/en/1.1.x/quickstart/
+
+### Hugo
+
+Uses the zzo theme: https://github.com/zzossig/hugo-theme-zzo
