@@ -1,4 +1,4 @@
-Source code for my personal blog, hosted at https://www.seancarpenter.io
+Source code for my personal blog, hosted at http://www.seancarpenter.io
 
 ### Todo
 
