@@ -2,8 +2,3 @@
   title = "Hugo Zzo Theme"
   languageName = "English"
   weight = 1
-
-[ko]
-  title = "Hugo Zzo Theme"
-  languageName = "한국어"
-  weight = 2
