@@ -1,5 +1,9 @@
 Source code for my personal blog, hosted at http://www.seancarpenter.io
 
+To fetch the this repo and associated submodules (such as the zzo theme), call:
+
+    git clone --recurse-submodules https://github.com/Seancarpenter/Blog
+
 ### Todo
 
 POC
