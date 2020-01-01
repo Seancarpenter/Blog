@@ -1,0 +1,153 @@
+{{ $jquery := resources.Get "js/jquery.min.js" | resources.Fingerprint }}
+<script defer src="{{ $jquery.RelPermalink }}"></script>
+{{ $enquire := resources.Get "js/enquire.min.js" | resources.Fingerprint }}
+<script defer src="{{ $enquire.RelPermalink }}"></script>
+{{ $masonry := resources.Get "js/masonry.pkgd.min.js" | resources.Fingerprint }}
+<script defer src="{{ $masonry.RelPermalink }}"></script>
+{{ $imagesloaded := resources.Get "js/imagesloaded.pkgd.min.js" | resources.Fingerprint }}
+<script defer src="{{ $imagesloaded.RelPermalink }}"></script>
+{{ $zzo := resources.Get "js/zzo.js" | resources.Minify | resources.Fingerprint }}
+<script defer src="{{ $zzo.RelPermalink }}"></script>
+{{ $lazysizes := resources.Get "js/lazysizes.min.js" | resources.Fingerprint }}
+<script defer src="{{ $lazysizes.RelPermalink }}"></script>
+{{ $photoSwipe := resources.Get "lib/photoswipe/photoswipe.min.js" | resources.Fingerprint }}
+<script defer src="{{ $photoSwipe.RelPermalink }}"></script>
+{{ $photoSwipeUi := resources.Get "lib/photoswipe/photoswipe-ui-default.min.js" | resources.Fingerprint }}
+<script defer src="{{ $photoSwipeUi.RelPermalink }}"></script>
+{{ $photoSwipeStyle := resources.Get "lib/photoswipe/photoswipe.css" | resources.Minify }}
+<link rel="stylesheet" href="{{ $photoSwipeStyle.RelPermalink }}">
+{{ $photoSwipeSkin := resources.Get "lib/photoswipe/custom-skin.css" | resources.Minify }}
+<link rel="stylesheet" href="{{ $photoSwipeSkin.RelPermalink }}">
+
+<script>
+  window.onload = function() {
+    // search
+    runSearch();
+    
+    // masonry
+    var $grid = $('.grid').masonry({
+      itemSelector: '.grid-item',
+      columnWidth: '.grid-sizer',
+      percentPosition: true,
+    });
+    $grid.imagesLoaded().progress(function () {
+      $grid.masonry();
+    });
+
+    $('.grid-item').mouseenter(function () {
+      $(this).children('.grid-item__desc').show();
+    });
+
+    $('.grid-item').mouseleave(function () {
+      $(this).children('.grid-item__desc').hide();
+    });
+
+    enquire.register("screen and (max-width:1200px)", {
+      match: function () {
+        $('.grid-item').addClass('quarter');
+        $('.grid-sizer').addClass('quarter');
+        $('.grid-item').removeClass('fifth');
+        $('.grid-sizer').removeClass('fifth');
+      },
+      unmatch: function () {
+        $('.grid-item').addClass('fifth');
+        $('.grid-sizer').addClass('fifth');
+        $('.grid-item').removeClass('quarter');
+        $('.grid-sizer').removeClass('quarter');
+      },
+    }).register("screen and (max-width:900px)", {
+      match: function () {
+        $('.grid-item').addClass('third');
+        $('.grid-sizer').addClass('third');
+        $('.grid-item').removeClass('quarter');
+        $('.grid-sizer').removeClass('quarter');
+      },
+      unmatch: function () {
+        $('.grid-item').addClass('quarter');
+        $('.grid-sizer').addClass('quarter');
+        $('.grid-item').removeClass('third');
+        $('.grid-sizer').removeClass('third');
+      },
+    }).register("screen and (max-width:700px)", {
+      match: function () {
+        $('.grid-item').addClass('half');
+        $('.grid-sizer').addClass('half');
+        $('.grid-item').removeClass('third');
+        $('.grid-sizer').removeClass('third');
+      },
+      unmatch: function () {
+        $('.grid-item').addClass('third');
+        $('.grid-sizer').addClass('third');
+        $('.grid-item').removeClass('half');
+        $('.grid-sizer').removeClass('half');
+      },
+    }).register("screen and (max-width:500px)", {
+      match: function () {
+        $('.grid-item').addClass('full');
+        $('.grid-sizer').addClass('full');
+        $('.grid-item').removeClass('half');
+        $('.grid-sizer').removeClass('half');
+      },
+      unmatch: function () {
+        $('.grid-item').addClass('half');
+        $('.grid-sizer').addClass('half');
+        $('.grid-item').removeClass('full');
+        $('.grid-sizer').removeClass('full');
+      },
+    });
+
+    // gallery
+    var pswpElement = $('.pswp')[0];
+    var imgElements = $('.single__contents').find('img');
+    var items = [];
+
+    {{ $mode:= .Params.Mode }}
+    var mode = JSON.parse({{ $mode | jsonify }});    
+
+    imgElements.each(function (i, v) {
+      $(this).parent().click(function (e) {
+        initGallery(i);
+      });
+      $(this).css('cursor', 'pointer');
+
+      var caption = null;
+      if (mode && mode.toLowerCase().includes('one')) {        
+        caption = $(this).attr('alt');
+      } else {
+        caption = filename(v['src']);
+      }
+
+      items.push({
+        src: v['src'],
+        w: 0,
+        h: 0,
+        title: caption,
+      });
+    });
+  
+    function filename(str) {
+      var s = str.replace(/\\/g, '/');
+      s = s.substring(s.lastIndexOf('/') + 1);
+      return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+    }
+  
+    function initGallery(index) {
+      var options = { index: index };
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+      gallery.listen('imageLoadComplete', function (index, item) {
+        if (item.h < 1 || item.w < 1) {
+          let img = new Image();
+          img.onload = () => {
+            item.w = img.width;
+            item.h = img.height;
+            gallery.invalidateCurrItems();
+            gallery.updateSize(true);
+          }
+          img.src = item.src;
+        }
+      });
+
+      gallery.init();
+    }  
+  }
+</script>

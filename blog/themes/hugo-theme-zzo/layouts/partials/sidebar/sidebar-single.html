@@ -1,0 +1,20 @@
+{{ if $.Param "enableSidebar" }}
+{{ if or ($.Param "enableToc") ($.Param "toc") }}
+
+<section class="sidebar">
+  <div class="toc__flexbox" data-position="{{ if $.Param "hideToc" }}absolute{{ else }}fixed{{ end }}">
+    <h6 class="toc__title">{{ i18n "toc-label" }}</h6>
+    {{ if $.Param "enableTocSwitch" }}
+      <label class="switch">
+        <input id="toggle-toc" aria-label="Toggle TOC" type="checkbox" {{ if $.Param "hideToc" }}{{ else }}checked{{ end }}>
+        <span class="slider round"></span>
+      </label>
+    {{ end }}
+  </div>
+  <div class="toc {{ if $.Param "hideToc" }}hide{{ end }}">
+    {{ .TableOfContents }}
+  </div>
+</section>
+
+{{ end }}
+{{ end }}

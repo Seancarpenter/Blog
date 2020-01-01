@@ -1,0 +1,64 @@
+{{ define "main" }}
+
+{{ $enquire := resources.Get "js/enquire.min.js" | resources.Fingerprint }}
+<script src="{{ $enquire.RelPermalink }}"></script>
+
+<main class="{{ if or ($.Param "enableToc") ($.Param "toc") }}{{ if $.Param "hideToc" }}main{{ else }}main-main{{ end }}{{ else }}main{{ end }}">
+  {{ if eq .Site.Params.enableBreadcrumb true }}
+  {{ partial "body/breadcrumb" . }}
+  {{ end }}
+  <div class="single">
+    <h2 class="single__title">{{ .Title }}</h2>
+    <div class="single__meta">
+      {{ partial "body/infos" . }}
+      {{ partial "body/tags" . }}
+    </div>    
+    <article class="single__contents">
+      {{ .Content }}
+    </article>
+    {{ partial "body/donation" . }}
+    {{ partial "body/whoami" . }}
+    {{ partial "body/related" . }}
+    {{ partial "pagination/pagination-single" . }}
+    {{ partial "comments/comments.html" . }}
+    {{ partial "body/photoswipe" . }}
+
+    <div class="hide">
+    {{ partial "search/site-search" . }}
+    </div>
+  </div>
+</main>
+
+{{ if $.Param "enableSidebar" }}
+<aside class="{{ if or ($.Param "enableToc") ($.Param "toc") }}main-side{{ end }}">
+  {{ partial "sidebar/sidebar-single" . }}
+</aside>
+{{ end }}
+<script>
+  enquire.register("screen and (max-width: 769px)", {
+    match: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "hide";
+      }
+    },
+    unmatch: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main-main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "main-side";
+      }
+      document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
+      document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
+      document.getElementsByClassName('mobile-search')[0].classList.add('hide');
+    },
+    setup: function () { },
+    deferSetup: true,
+    destroy: function () { },
+  });
+</script>
+{{ partial "script/single-script" . }}
+{{ end }}

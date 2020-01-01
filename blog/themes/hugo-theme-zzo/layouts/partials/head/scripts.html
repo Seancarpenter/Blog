@@ -1,0 +1,281 @@
+{{ if .Site.Params.custom_js }}
+{{ range .Site.Params.custom_js }}
+  {{ $custom_template := resources.Get . }}
+  {{ if $custom_template }}
+    {{ $custom_js := $custom_template | resources.Minify | resources.Fingerprint }}
+    <script defer src="{{ $custom_js.RelPermalink }}"></script>
+  {{ end }}
+{{ end }}
+{{ end }}
+
+{{ $fuse := resources.Get "js/fuse.min.js" | resources.Fingerprint }}
+<script defer src="{{ $fuse.RelPermalink }}"></script>
+
+<script>
+  // search
+  var baseurl = null;
+  var runSearch = function() {
+    {{ if .Site.IsMultiLingual }}
+        var isSubDirDisabled = location.pathname.startsWith("/{{.Site.Language.Lang}}");
+        if (isSubDirDisabled) {          
+          baseurl = location.origin + "/{{.Site.Language.Lang}}";          
+        } else {
+          baseurl = location.origin;
+        }
+    {{ else }}
+        baseurl = location.origin;
+    {{ end }}
+
+    var searchResults = null;
+    var searchMenu = null;
+    var searchText = null;
+    
+    {{ $enableSearchHighlight := ($.Param "enableSearchHighlight") }}
+    var enableSearchHighlight = JSON.parse({{ $enableSearchHighlight | jsonify }});
+
+    var fuse = null;
+
+    function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function initFuse() {
+      if (!endsWith(baseurl, "/")) {
+        baseurl = baseurl + '/';
+      };
+
+      $.ajax({
+        type: "GET",
+        url: baseurl + "index.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+        .done(function (index) {
+          fuse = new Fuse(index, {
+            keys: ['title', 'description', 'content'],
+            includeMatches: enableSearchHighlight,
+            shouldSort: true,
+            threshold: 0.4,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+          });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+          var err = textStatus + ", " + error;
+          console.error("Error getting Hugo index file:", err);
+        });
+    }
+
+    function renderSearchResults(results) { // [{}, {}, ...] or [{item: {}, matches: []}, ...]
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${result.title}</div><div class="menu-item__desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchHighlightResults(results) {      
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.item.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${generateHighlightedText(result.item.title, result.matches[0].indices)}</div><div class="menu-item__desc">${result.matches[1] ? generateHighlightedText(result.item.description, result.matches[1].indices) : result.matches[2] ? generateHighlightedText(result.item.content, result.matches[2].indices) : ''}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${result.title}</div><div class="mobile-search__item--desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    function renderSearchHighlightResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.item.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${generateHighlightedText(result.item.title, result.matches[0].indices)}</div><div class="mobile-search__item--desc">${result.matches[1] ? generateHighlightedText(result.item.description, result.matches[1].indices) : result.matches[2] ? generateHighlightedText(result.item.content, result.matches[2].indices) : ''}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    function generateHighlightedText(text, regions) {
+      if(!regions) return text;
+      
+      var content = '', nextUnhighlightedRegionStartingIndex = 0;
+
+      regions.forEach(function(region) {
+        content += '' +
+          text.substring(nextUnhighlightedRegionStartingIndex, region[0]) +
+          '<span class="search__highlight">' +
+            text.substring(region[0], region[1] + 1) +
+          '</span>' +
+        '';
+        nextUnhighlightedRegionStartingIndex = region[1] + 1;
+      });
+
+      content += text.substring(nextUnhighlightedRegionStartingIndex);
+
+      return content;
+    };
+
+    initFuse();
+
+    $("#search").on('input', function (e) {
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+
+      if ($(window).width() < 770) {
+        return null;
+      } 
+
+      searchText = e.target.value;
+      var results = fuse.search(e.target.value);
+      if (enableSearchHighlight) {
+        renderSearchHighlightResults(results);
+      } else {
+        renderSearchResults(results);
+      }
+    });
+
+    $('#search').on('blur', function () {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      setTimeout(function () {
+        $('#search-results').attr('class', 'dropdown');
+      }, 100);
+    });
+
+    $('#search').on('click', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+      
+      searchText = e.target.value;
+      var results = fuse.search(e.target.value);
+      if (enableSearchHighlight) {
+        renderSearchHighlightResults(results);
+      } else {
+        renderSearchResults(results);
+      }
+    });
+
+    $('#search').on('keydown', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      var items = $('#search-menu .dropdown-item');
+      var activeIndex = $('#search-menu .dropdown-item.is-active').index();
+
+      items.removeClass('is-active');
+      if (e.key === 'ArrowDown') {
+        items.eq(activeIndex + 1).addClass('is-active');
+      } else if (e.key === 'ArrowUp') {
+        items.eq(activeIndex - 1).addClass('is-active');
+      } else if (e.key === 'Enter') {
+        var currentItemLink = items.eq(activeIndex).attr('href');
+        if (currentItemLink) {
+          location.href = currentItemLink;
+        }
+      }
+    });
+
+    $("#search-mobile").on('input', function(e) {
+      if (!e.target.value) {
+        $('#search-mobile-results').empty();
+        return null;
+      }
+
+      searchText = e.target.value;
+      var results = fuse.search(e.target.value);
+      renderSearchResultsMobile(results);
+      if (enableSearchHighlight) {
+        renderSearchHighlightResultsMobile(results);
+      } else {
+        renderSearchResultsMobile(results);
+      }
+    });
+  }
+</script>

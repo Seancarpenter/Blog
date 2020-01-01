@@ -1,0 +1,38 @@
+{{ define "main" }}
+<header class="header">
+  <h3 class="h3 terms__title">
+    {{ .Title }}
+  </h3>
+  <div>
+    {{ .Content }}
+  </div>
+</header>
+</span>
+<main class="main archive">
+  <div class="archive__container">
+    {{ $pages := (where .Site.RegularPages "Section" "!=" "talks") }}
+    {{ $paginator := .Paginate ($pages.GroupByDate (.Site.Params.archiveGroupByDate | default "2006")) .Site.Params.archivePaginate }}
+    
+    {{ range ($paginator).PageGroups }}
+    <span class="archive__key">{{ .Key }}</span>
+    <ul class="archive__ul">
+      {{ range .Pages }}
+      <li class="archive__li">
+        <span class="archive__meta">
+          <span class="archive__type">{{ .Type }}</span>
+          <span class="archive__date">{{ .Date.Format (i18n "archive-dateformat") }}</span>
+        </span>        
+        <a href="{{ .Permalink }}" class="archive__title">{{ .Title }}</a>        
+      </li>
+      {{ end }}
+    </ul>
+    {{ end }}    
+  </div>
+  <div class="grow"></div>
+  {{ partial "pagination/pagination" . }}
+  <div class="hide">
+    {{ partial "search/site-search" . }}
+  </div>
+  {{ partial "script/archive-script" . }}
+</main>
+{{ end }}

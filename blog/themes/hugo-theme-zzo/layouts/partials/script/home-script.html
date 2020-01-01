@@ -1,0 +1,21 @@
+{{ $jquery := resources.Get "js/jquery.min.js" | resources.Fingerprint }}
+<script defer src="{{ $jquery.RelPermalink }}"></script>
+{{ $lazysizes := resources.Get "js/lazysizes.min.js" | resources.Fingerprint }}
+<script defer src="{{ $lazysizes.RelPermalink }}"></script>
+{{ $zzo := resources.Get "js/zzo.js" | resources.Minify | resources.Fingerprint }}
+<script defer src="{{ $zzo.RelPermalink }}"></script>
+
+<script>
+  window.onload = function() {
+    // search
+    runSearch();
+
+    // counter
+    {{ $enableBusuanzi := .Site.Params.enableBusuanzi }}
+    var enableBusuanzi = JSON.parse({{ $enableBusuanzi | jsonify }});
+    if (enableBusuanzi) {
+      $('#busuanzi_value_site_uv').digits();
+      $('#busuanzi_value_site_pv').digits();
+    }
+  }
+</script>

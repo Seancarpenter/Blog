@@ -1,0 +1,248 @@
+.search {
+  position: relative;
+  border-radius: 0.25rem;
+  height: $search-height;
+  z-index: z('search');
+  margin-bottom: 0.5rem;  
+  
+  @include flexbox();
+  @include align-items(center);
+  @include themify($themes) {
+    border: 2px solid themed('search-border-color');
+    background-color: themed("search-background-color");
+  }
+
+  .icon {
+    padding: 0.25rem;
+    @include flexbox();
+    @include themify($themes) {
+      color: themed("search-icon-color");
+    }
+  }
+
+  .input {
+    width: 100%;
+    font-size: 0.9rem;
+    border: none;
+    outline: none;
+    padding-right: 1rem;
+
+    @include truncate($grid_main_side_width + $grid_main_side_unit);
+    @include themify($themes) {
+      color: themed("search-color");
+      background-color: inherit;
+      @include input-placeholder {
+        font-family: $title-font;
+        color: themed("search-placeholder-color");
+      }
+    }
+  }
+
+  &-content {
+    margin-top: 0.25rem;
+    max-height: 350px;
+    overflow: auto;
+    a {
+      text-decoration: none !important;
+    }
+  }
+
+  &__highlight {
+    @include themify($themes) {
+      color: themed('search-highlight-color');
+    }
+  }
+}
+
+.menu-item {
+  padding: 0.25rem;
+
+
+  &__title {
+    font-size: 1rem;
+    @include themify($themes) {
+      color: themed('body-color');
+    }
+  }
+
+  &__desc {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+
+    @include truncate($grid_main_side_width + $grid_main_side_unit);
+    @include themify($themes) {
+      color: themed('search-color');
+    }
+  }
+}
+
+#search-results {
+  &.dropdown {
+    display: none;
+    &.is-active {
+      display: inline-block;
+      margin-top: 0.25rem;
+      position: absolute;
+      top: $search-height;
+      width: 100%;
+      border-radius: 0.1rem;
+      @include box-shadow(0, 1px, 3px, 0, rgba(0, 0, 0, 0.4));
+      @include themify($themes) {
+        color: themed('search-content-color');
+        background-color: themed('search-content-background-color');
+      }
+    }    
+  }  
+
+  .dropdown {
+    &-content {
+      @include flexbox();
+      @include flex-direction(column);
+    }
+
+    &-item {
+      font-size: 1rem;
+      padding: 0.125rem;
+      @include on-event {
+        @include themify($themes) {
+          background-color: themed('search-hover-background-color');
+        }
+        border-bottom-left-radius: 0.1rem;
+        border-bottom-right-radius: 0.1rem;        
+      }
+
+      &.is-active {
+        @include themify($themes) {
+          background-color: themed('search-hover-background-color');
+        }
+      }
+    }    
+  }
+}
+
+.mobile-search {
+  position: absolute;
+  z-index: z('modal');
+  width: 100%;  
+  overflow: hidden;
+
+  &__top {
+    width: 100%;
+    height: $grid_navbar_height;
+    text-align: right;
+    position: relative;
+
+    @include flexbox();
+    @include align-items(center);
+    @include themify($themes) {
+      border-bottom: 1px solid themed('navbar-border-bottom-color');
+      background-color: themed('navbar-background-color');
+    }
+
+    &--icon {
+      width: 50px;
+      height: $grid_navbar_height;
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+
+      @include flexbox();
+      @include align-items(center);
+      @include justify-content(center);
+      @include themify($themes) {
+        color: themed('burger-menu-color');
+        @include on-event {
+          color: themed('link-hover');
+        }
+      }
+    }
+
+    &--input {      
+      width: calc(100% - 70px);
+      height: 70%;
+      outline: none;
+      border: none;
+      border-radius: 0.25rem;
+      padding: 0 1rem;
+      font-size: 1.1rem;
+      @include themify($themes) {
+        color: themed('body-color');
+        background-color: themed('navbar-background-color');
+
+        @include input-placeholder {
+          font-family: $title-font;
+          color: themed("search-placeholder-color");
+        }
+      }
+    }
+  }
+
+  &__body {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;   
+
+    @include themify($themes) {
+      color: themed('body-color');
+      background-color: themed('body-background-color');
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    top: 0;
+    right: 35px;
+    width: 35px;
+    height: $grid_navbar_height;
+    padding: 0.25rem;
+    cursor: pointer;
+    display: none;
+    z-index: z('search-btn');
+
+    @include animation('slide-in-down .5s .25s 1 ease both');
+    @include themify($themes) {
+      color: themed('burger-menu-color');  
+      @include on-event {
+        color: themed('link-hover');   
+      }
+    }
+
+    @media only screen and (max-width: 769px) {
+      @include flexbox();
+      @include align-items(center);
+      @include justify-content(center);
+    }
+  }
+
+  &__content {    
+    a {
+      text-decoration: none !important;
+    }
+  }
+
+  &__item {   
+    padding: 0.5rem;   
+    &--title {
+      font-size: 1.2rem;      
+      @include themify($themes) {
+        color: themed('body-color');
+      }
+    }
+
+    &--desc {
+      font-size: 0.9rem;
+      padding: 0.25rem 0.5rem;
+      
+      @include truncate(960px);
+      @include themify($themes) {
+        color: themed('search-color');
+      }
+    }
+    
+    @include on-event {
+      @include themify($themes) {
+        background-color: themed('search-hover-background-color');
+      }
+    }
+  }
+}

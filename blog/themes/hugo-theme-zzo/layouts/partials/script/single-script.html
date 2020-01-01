@@ -1,0 +1,459 @@
+{{ $js := .Site.Data.lib.js }}
+{{ $css := .Site.Data.lib.css }}
+
+{{ $jquery := resources.Get "js/jquery.min.js" | resources.Fingerprint }}
+<script defer src="{{ $jquery.RelPermalink }}"></script>
+{{ $enquire := resources.Get "js/enquire.min.js" | resources.Fingerprint }}
+<script defer src="{{ $enquire.RelPermalink }}"></script>
+{{ $clipboard := resources.Get "js/clipboard.min.js" | resources.Fingerprint }}
+<script defer src="{{ $clipboard.RelPermalink }}"></script>
+{{ $lazysizes := resources.Get "js/lazysizes.min.js" | resources.Fingerprint }}
+<script defer src="{{ $lazysizes.RelPermalink }}"></script>
+{{ $zzo := resources.Get "js/zzo.js" | resources.Minify | resources.Fingerprint }}
+<script defer src="{{ $zzo.RelPermalink }}"></script>
+
+{{ if $.Param "enablePhotoSwipe" }}
+  {{ $photoSwipe := resources.Get "lib/photoswipe/photoswipe.min.js" | resources.Fingerprint }}
+  <script defer src="{{ $photoSwipe.RelPermalink }}"></script>
+  {{ $photoSwipeUi := resources.Get "lib/photoswipe/photoswipe-ui-default.min.js" | resources.Fingerprint }}
+  <script defer src="{{ $photoSwipeUi.RelPermalink }}"></script>
+  {{ $photoSwipeStyle := resources.Get "lib/photoswipe/photoswipe.css" | resources.Minify }}
+  <link rel="stylesheet" href="{{ $photoSwipeStyle.RelPermalink }}">
+  {{ $photoSwipeSkin := resources.Get "lib/photoswipe/custom-skin.css" | resources.Minify }}
+  <link rel="stylesheet" href="{{ $photoSwipeSkin.RelPermalink }}">
+{{ end }}
+
+{{ if in .Params.Libraries "mermaid" }}
+  <script defer src="{{ $js.mermaid.url }}" integrity="{{ $js.mermaid.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+{{ if in .Params.Libraries "katex" }}
+  <link rel="stylesheet" href="{{ $css.katex.url }}" integrity="{{$css.katex.sri }}" crossorigin="anonymous">
+  <script defer src="{{ $js.katex.url }}" integrity="{{ $js.katex.sri }}" crossorigin="anonymous"></script>
+  <script defer src="{{ $js.katex_auto_render.url }}" integrity="{{ $js.katex_auto_render.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+{{ if in .Params.Libraries "flowchartjs" }}
+  <script defer src="{{ $js.raphael.url }}" integrity="{{ $js.raphael.sri }}" crossorigin="anonymous"></script>
+  <script defer src="{{ $js.flowchartjs.url }}" integrity="{{ $js.flowchartjs.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+{{ if in .Params.Libraries "mathjax" }}
+  <script defer src="{{ $js.mathjax.url }}" integrity="{{ $js.mathjax.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+{{ if in .Params.Libraries "msc" }}
+  <script defer src="{{ $js.webfont.url }}"></script>
+  <script defer src="{{ $js.snap_svg.url }}"></script>
+  <script defer src="{{ $js.lodash.url }}" integrity="{{ $js.lodash.sri }}" crossorigin="anonymous"></script>
+  <script defer src="{{ $js.sequence_diagram.url }}" integrity="{{ $js.sequence_diagram.sri }}" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{{ $css.sequence_diagram.url }}" integrity="{{ $css.sequence_diagram.sri }}" crossorigin="anonymous">
+{{ end }}
+
+{{ if in .Params.Libraries "chart" }}
+  <script defer src="{{ $js.chart.url }}" integrity="{{ $js.chart.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+{{ if in .Params.Libraries "wavedrom" }}
+<script defer src="{{ $js.wavedrom.url }}" integrity="{{ $js.wavedrom.sri }}" crossorigin="anonymous"></script>
+<script defer src="{{ $js.wavedrom_skin.url }}" integrity="{{ $js.wavedrom_skin.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+{{ if in .Params.Libraries "viz" }}
+  <script defer src="{{ $js.viz.url }}" crossorigin="anonymous"></script>
+  <script defer src="{{ $js.viz_render.url }}" integrity="{{ $js.viz_render.sri }}" crossorigin="anonymous"></script>
+{{ end }}
+
+
+<script>
+  window.onload = function() {
+    (function () {
+      document.querySelectorAll('.single__contents > pre > code')
+        .forEach((element) => {
+          if (!$(element).attr('data-lang')) {
+            $(element).parent().wrap('<div data-lang="Code" class="language-code"></div>');
+          }
+        });
+    })();
+
+    function mapLang(name) {
+      return {
+        coffeescript: 'CoffeeScript',
+        cpp: 'C++',
+        cs: 'C#',
+        js: 'JavaScript',
+        json: 'JSON',
+        objectivec: 'Objective-C',
+        ts: 'TypeScript',
+        typescript: 'TypeScript',
+      }[name] || name.toUpperCase();
+    }
+
+    // search
+    runSearch();
+
+    // counter
+    {{ $enableBusuanzi := .Site.Params.enableBusuanzi }}
+    {{ $busuanziPagePV := .Site.Params.busuanziPagePV }}
+    var enableBusuanzi = JSON.parse({{ $enableBusuanzi | jsonify }});
+    var busuanziPagePV = JSON.parse({{ $busuanziPagePV | jsonify }});
+    
+    if (enableBusuanzi && busuanziPagePV) {      
+      $('#busuanzi_value_page_pv').digits();
+    }    
+
+    var navbar = $('.navbar');
+
+    // toc
+    {{ $enableToc := ($.Param "enableToc") }}
+    {{ $toc := ($.Param "toc") }}
+    {{ $hideToc := ($.Param "hideToc") }}
+    var enableToc = JSON.parse({{ $enableToc | jsonify }});
+    var toc = JSON.parse({{ $toc | jsonify }});
+    var hideToc = JSON.parse({{ $hideToc | jsonify }});
+    
+    if (enableToc || toc) {
+      $('#TableOfContents > ul > li').each(function () {
+        $(this).find('ul').css('display', 'none');
+      });
+      $('#TableOfContents a').each(function () {
+        $(this).click(function () {
+          navbar.removeClass('navbar--show');
+          navbar.removeClass('navbar--hide');
+          navbar.addClass('navbar--hide');
+
+          $(".single__contents :header").each(function () {
+            $('.toc a').removeClass('active');
+          });
+          $(this).addClass('active');
+
+          $('#TableOfContents > ul > li').each(function () {
+            $(this).find('ul').css('display', 'none');
+          });
+          $(this).next().css('display', 'block');
+          $(this).parents('ul').css('display', 'block');
+        });
+      });
+
+      // toc visibility
+      $("#toggle-toc").change(function () {
+        if (this.checked) {
+          $('.toc').fadeIn(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'fixed');
+        } else {
+          $('.toc').fadeOut(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'absolute');
+        }
+      });
+    }
+
+    // Add link button for every
+    var text, clip = new ClipboardJS('.anchor');
+    var headers = $('.single__contents :header').not('h6').not('h5');
+    headers.append(function (index, html) {
+      var element = $(this);
+      var url = encodeURI(document.location.origin + document.location.pathname);
+      var link = url + "#" + element[0].id;
+      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
+        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
+        "</span>"
+        ;
+    });
+    headers.on('mouseenter', function () {
+      $(this).find('.anchor').attr('class', 'anchor');
+    });
+    headers.on('mouseleave', function () {
+      $(this).find('.anchor').attr('class', 'anchor hide');
+    });
+
+    $(".anchor").on('mouseleave', function (e) {
+      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
+    });
+
+    clip.on('success', function (e) {
+      e.clearSelection();
+      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
+    });
+    
+    $('.language-code').each(function (i, node) {
+      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
+    });
+
+    // clipboard
+    var clipInit = false;
+    $('pre.chroma code, .language-code code').each(function () {
+      var code = $(this),
+        text = code.text();
+
+      if (text.length > 30) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              console.log();
+              if ($(trigger).prev().find('code').length > 1) {                
+                text = $(trigger).prev().find(`code[class^="language-"]`).text();
+              } else {
+                text = $(trigger).prev().find('code').text();
+              }
+               
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', fallbackMessage(e.action)).addClass('tooltipped tooltipped-w');
+            $(document).one('copy', function () {
+              $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+            });
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.attr('class');
+
+        for (let str of notAllowedClass) {
+          if (curClassName && curClassName.startsWith(str)) {
+            isNotAllowedIncluded = true;
+            break;
+          } 
+        }
+        
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
+          }         
+        }        
+      }
+    });
+
+    // gallery
+    {{ $enablePhotoSwipe := ($.Param "enablePhotoSwipe") }}
+    var enablePhotoSwipe = JSON.parse({{ $enablePhotoSwipe | jsonify }});
+    
+    if (enablePhotoSwipe) {
+      var pswpElement = $('.pswp')[0];
+      var imgElements = $('.single__contents').find('img');
+      var items = [];
+
+      imgElements.each(function (i, v) {
+        $(this).click(function (e) {
+          initGallery(i);
+        });
+        $(this).css('cursor', 'pointer');
+        items.push({
+          src: v['src'],
+          w: 0,
+          h: 0,
+          title: filename(v['src']),
+        });
+      });
+
+      function filename(str) {
+        var s = str.replace(/\\/g, '/');
+        s = s.substring(s.lastIndexOf('/') + 1);
+        return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+      }
+
+      function initGallery(index) {
+        var options = { index: index };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.listen('imageLoadComplete', function (index, item) {
+          if (item.h < 1 || item.w < 1) {
+            let img = new Image();
+            img.onload = () => {
+              item.w = img.width;
+              item.h = img.height;
+              gallery.invalidateCurrItems();
+              gallery.updateSize(true);
+            }
+            img.src = item.src;
+          }
+        });
+        gallery.init();
+      }
+    }
+
+    // mermaid
+    {{ $lib := .Params.libraries }}
+    var lib = JSON.parse({{ $lib | jsonify }});
+
+    if (lib && lib.includes('mermaid')) {
+      {{ $themeVariant := (index .Site.Params.themeOptions 0) }}
+      var themeVariant = localStorage.getItem('theme') || JSON.parse({{ $themeVariant | jsonify }});
+
+      if (themeVariant === "dark" || themeVariant === "hacker") {
+        mermaid.initialize({ theme: 'dark' });
+      } else {
+        mermaid.initialize({ theme: 'default' });
+      }
+      
+      let mermaids = [];
+      [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
+      for (i = 0; i < mermaids.length; i++) {
+        $(mermaids[i]).unwrap('pre');
+        $(mermaids[i]).replaceWith(function () {
+          return $("<div />").append($(this).contents()).addClass('mermaid').css('padding', '34px 4px 6px');
+        });
+      }
+    }
+
+    // katex
+    if (lib && lib.includes('katex')) {
+      var mathElements = document.getElementsByClassName('math');
+      var options = [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ];
+
+      renderMathInElement(document.querySelector('.single__contents'), options);
+    }
+
+    // flowchart.js
+    if (lib && lib.includes('flowchartjs')) {
+      {{ $flowchartjs := .Site.Data.flowchartjs }}
+      var options = JSON.parse({{ $flowchartjs | jsonify }});
+
+      var flowchartPrefix = "language-flowchart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + flowchartPrefix + "]"), function(x){
+          x.style.display = 'none'
+          x.parentNode.style.backgroundColor = "transparent"
+          jsonContent = x.innerText;
+
+          node0 = document.createElement('div');
+          node0.id = 'flowchart' + index;
+          x.parentNode.insertBefore(node0, x);
+
+          var diagram = flowchart.parse(jsonContent);
+          diagram.drawSVG("flowchart"+index, options);
+
+          index +=1;
+      });      
+    }
+
+    // mathjax
+    if (lib && lib.includes('mathjax')) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: false,
+          packages: { '[+]': ['noerrors'] }
+        },
+        loader: {
+          load: ['[tex]/noerrors']
+        },
+      };
+    }
+
+    // js-sequence-diagram
+    if (lib && lib.includes('msc')) {
+      {{ $msc := .Site.Data.msc }}
+      var options = JSON.parse({{ $msc | jsonify }});    
+
+      var index = 0;
+      var chartPrefix = "language-msc";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'msc' + index;
+        x.parentNode.insertBefore(node0, x);
+        var diagram = Diagram.parse(jsonContent);
+        diagram.drawSVG("msc" + index, options);
+        index += 1;
+      });
+    }
+
+    // chart.js
+    if (lib && lib.includes('chart')) {
+      var borderColor = "#666";
+      var bgColor = "#ddd";
+      var borderWidth = 2;
+
+      Chart.defaults.global.elements.rectangle.borderWidth = borderWidth;
+      Chart.defaults.global.elements.rectangle.borderColor = borderColor;
+      Chart.defaults.global.elements.rectangle.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.line.borderWidth = borderWidth;
+      Chart.defaults.global.elements.line.borderColor = borderColor;
+      Chart.defaults.global.elements.line.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.point.borderWidth = borderWidth;
+      Chart.defaults.global.elements.point.borderColor = borderColor;
+      Chart.defaults.global.elements.point.backgroundColor = bgColor;
+
+      var chartPrefix = "language-chart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('canvas');
+        node0.height = 200;
+        node0.style.height = 200;
+        node0.id = 'myChart' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        var ctx = document.getElementById('myChart' + index).getContext('2d');
+        var myChart = new Chart(ctx, source);
+        index += 1;
+      });            
+    }
+
+    // wavedrom
+    if (lib && lib.includes('wavedrom')) {
+      var wavePrefix = "language-wave";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + wavePrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'WaveDrom_Display_' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        WaveDrom.RenderWaveForm(index, source, "WaveDrom_Display_");
+        index += 1;
+      });
+    }
+
+    // viz diagram
+    if (lib && lib.includes('viz')) {
+      var vizPrefix = "language-viz-";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + vizPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        var engine;
+        x.getAttribute("class").split(" ").forEach(function (cls) {
+          if (cls.startsWith(vizPrefix)) {
+            engine = cls.substr(vizPrefix.length);
+          }
+        });
+        var viz = new Viz();
+        viz.renderSVGElement(x.innerText, { engine: engine })
+          .then(function (element) {
+            element.style.width = "100%";
+            x.parentNode.insertBefore(element, x);
+          })
+      });
+    }
+  }
+</script>

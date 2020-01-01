@@ -1,0 +1,25 @@
+.clearfix::after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+.container {
+  max-width: 100%; /* 1 */
+  margin-left: auto; /* 2 */
+  margin-right: auto; /* 2 */
+  width: 100%; /* 1 */
+  min-height: 100vh;
+  position: relative;
+  @include themify($themes) {
+    background-color: themed('body-background-color');
+  }
+ }
+
+.hide {
+  display: none;
+}
+
+.grow {
+  @include flex-grow(1);
+}

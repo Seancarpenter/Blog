@@ -1,0 +1,71 @@
+[search-placeholder]
+other = "검색"
+
+[summary-dateformat]
+other = "2006년 01월 02일"
+
+[reading-time]
+other = "min read"
+
+[taxo-tags]
+other = "태그"
+
+[taxo-categories]
+other = "카테고리"
+
+[taxo-series]
+other = "시리즈"
+
+[archive-dateformat]
+other = "01-02"
+
+[talks-dateformat]
+other = "01월 02일"
+
+[single-dateformat]
+other = "2006년 01월 02일"
+
+[single-related]
+other = "관련글"
+
+[single-writtenBy]
+other = "글쓴이"
+
+[toc-label]
+other = "목차"
+
+[counter-site-pv]
+other = "총 조회수"
+
+[counter-site-uv]
+other = "총 방문자 수"
+
+[counter-page-pv]
+other = "조회수"
+
+[donate-message]
+other = "후원하기"
+
+[contact-name]
+other = "이름"
+
+[contact-email]
+other = "이메일"
+
+[contact-message]
+other = "내용"
+
+[contact-send]
+other = "보내기"
+
+[tooltip-home]
+other = "홈페이지"
+
+[tooltip-written]
+other = "작성일"
+
+[tooltip-modified]
+other = "수정일"
+
+[tooltip-reading-time]
+other = "읽는 시간"
