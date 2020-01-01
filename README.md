@@ -6,29 +6,6 @@ To fetch the this repo and associated submodules (such as the zzo theme), call:
 
     git clone --recurse-submodules https://github.com/Seancarpenter/Blog
 
-### Todo
+The static CSS and HTML are generated using Hugo https://gohugo.io/ and a slightly modified version of the Zzo theme https://github.com/zzossig/hugo-theme-zzo. As the Zzo theme being used for this website has been modified a bit, it's not synced up with the actual theme hosted on Github, and will gradually drift as changes to Hugo and Zzo are made.
 
-POC
-SSL
-
-### Running The Server
-
-To run a local version of the server, navigate to the blog directory and run
-
-    python -m flask run
-
-To expose the server to the whole world, run
-
-    python -m flask run --host=0.0.0.0 --port=80
-
-To enter debug mode (and subsequently enable hot reloading), set the `FLASK_ENV` value to `development`
-
-    export FLASK_ENV=development
-
-### Helpful Resources
-
-    https://flask.palletsprojects.com/en/1.1.x/quickstart/
-
-### Hugo
-
-Uses the zzo theme: https://github.com/zzossig/hugo-theme-zzo
+This project was built using Hugo Version 0.62
