@@ -6,13 +6,13 @@ header:
     paddingY: 0
     align: center
     title:
-      - HUGO
+      - Various things
     subtitle:
-      - The world’s fastest framework for building websites
+      - A blog about various software engineering and computer science topics.
     titleFontSize: 44
     subtitleFontSize: 16
     spaceBetweenTitleSubtitle: 20
-  
+
   - type: img
     imageSrc: images/header/background.jpg
     imageSize: cover
