@@ -1,9 +1,9 @@
 {{ if $.Param "enableBio" }}
 <section class="bio">
   <hr class="hr-slash bio-hr"/>
-  <div class="bio__photo-wrapper">    
+  <div class="bio__photo-wrapper">
     {{ $src := "" }}
-    {{ if site.Params.useGravatar }}    
+    {{ if site.Params.useGravatar }}
       {{ $src = printf "https://s.gravatar.com/avatar/%s?s=200" (md5 .Site.Params.email) }}
       <img src="{{ $src }}" alt="{{ if .Site.Params.myname }}{{ .Site.Params.myname }}{{ else }}Avatar{{ end }}" class="bio__photo"/>
     {{ else }}
@@ -15,7 +15,7 @@
         <img data-src="{{ "images/whoami/avatar.svg" | relURL }}" alt="{{ if .Site.Params.myname }}{{ .Site.Params.myname }}{{ else }}Avatar{{ end }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" class="lazyload bio__photo"/>
       {{ else }}
         <img data-src="{{ "images/whoami/avatar.jpg" | relURL }}" alt="{{ if .Site.Params.myname }}{{ .Site.Params.myname }}{{ else }}Avatar{{ end }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" class="lazyload bio__photo"/>
-      {{ end }}      
+      {{ end }}
     {{ end }}
   </div>
   <hr class="hr-slash bio-hr"/>
@@ -25,7 +25,7 @@
   <div class="bio__desc">
     {{ .Site.Params.whoami }}
   </div>
-  
+
   {{ if .Site.Params.organization }}
   <div class="bio__info">
     <div class="bio__info--icon">
@@ -46,10 +46,10 @@
 
   {{ if .Site.Params.email }}
   <div class="bio__info">
-    <div class="bio__info--icon">      
+    <div class="bio__info--icon">
       {{ partial "svgs/social/email.svg" (dict "width" 20 "height" 20) }}
     </div>
-    <a href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a>    
+    <a href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a>
   </div>
   {{ end }}
 
@@ -58,11 +58,11 @@
     <div class="bio__info--icon">
       {{ partial "svgs/etc/link.svg" (dict "width" 20 "height" 20) }}
     </div>
-    <a href="{{ .Site.Params.link }}" target="_blank" rel="noreferrer">{{ .Site.Params.link }}</a>    
+    <a href="{{ .Site.Params.link }}" target="_blank" rel="noreferrer">{{ .Site.Params.link }}</a>
   </div>
   {{ end }}
 
-  <div class="bio__social">
+<!--   <div class="bio__social">
     {{ range $name, $path := $.Param "socialOptions" }}
       {{ if (and $path (ne $name "email")) }}
       <a href="{{ $path | safeURL }}" title="{{ $name }}" aria-label="{{ $name }}">
@@ -70,7 +70,7 @@
       </a>
       {{ end }}
     {{ end }}
-  </div>
+  </div> -->
 </section>
 <hr class="hr-fade sidebar-hr"/>
 {{ end }}
