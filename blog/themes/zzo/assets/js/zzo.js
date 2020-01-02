@@ -1,4 +1,4 @@
-$(document).ready(function() { 
+$(document).ready(function() {
   // theme change
   var localTheme = localStorage.getItem('theme');
   if (localTheme) {
@@ -49,7 +49,7 @@ $(document).ready(function() {
       }, 'https://utteranc.es');
     }
   });
-  
+
   // go to top
   $('.gtt').click(function () {
     $("html, body").animate({ scrollTop: 0 }, 250);
@@ -69,23 +69,23 @@ $(document).ready(function() {
     var navbar = $('.navbar');
 
     var scroll = $(window).scrollTop();
-    if (scroll > position) { // scroll down 
+    if (scroll > position) { // scroll down
       if (scroll < 250) {
         $('.gtt').hide(200);
       } else {
         $('.gtt').show(200);
-      } 
+      }
 
-      if (scroll < 45) {        
+      if (scroll < 45) {
         return null;
-      }      
+      }
 
       if (!navbar.hasClass('navbar--hide')) {
         navbar.addClass('navbar--hide');
       } else if (navbar.hasClass('navbar--show')) {
         navbar.removeClass('navbar--show');
       }
-            
+
       $(".single__contents :header").each(function () {
         if (!$("#toggle-toc").is(":checked")) {
             return null;
@@ -118,7 +118,7 @@ $(document).ready(function() {
         if (!$("#toggle-toc").is(":checked")) {
             return null;
         }
-        
+
         if ($(window).scrollTop() >= $(this).position().top) {
           var id = $(this).attr('id');
           $('.toc a').removeClass('active');
@@ -134,7 +134,7 @@ $(document).ready(function() {
     }
     position = scroll;
   });
-  
+
   // navbar
   $('.navbar__burger').click(function() {
     if ($(this).hasClass('is-active')) {
@@ -143,29 +143,6 @@ $(document).ready(function() {
     } else {
       $(this).addClass('is-active');
       $('.navbar__menu').addClass('is-active');
-    }
-  });
-
-  // mobile search
-  $('.mobile-search').hide(200);
-  $('#mobileSearchBtn').click(function() {
-    $('#search-mobile-container').fadeIn(250);
-    $('#search-mobile').focus();
-    $('html').css('overflow-y', 'hidden');
-  });
-  $('#search-mobile-close').click(function() {
-    $('#search-mobile-container').fadeOut(250);
-    $('#search-mobile').val('');
-    $('#search-mobile-results').empty();
-    $('html').css('overflow-y', 'visible');
-  });
-  $('#search-mobile').keydown(function(e) {
-    // e.key === "Enter"
-    if (e.key === "Escape") {
-      $('#search-mobile-container').fadeOut(250);
-      $('#search-mobile').val('');
-      $('#search-mobile-results').empty();
-      $('html').css('overflow-y', 'visible');
     }
   });
 
