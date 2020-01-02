@@ -4,3 +4,10 @@
     font-weight: 400;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../themes/zzo/static/fonts/montserrat-bold.woff2') format('woff2'),
+         url('../themes/zzo/static/fonts/montserrat-bold.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
