@@ -97,10 +97,10 @@
     {{ $busuanziPagePV := .Site.Params.busuanziPagePV }}
     var enableBusuanzi = JSON.parse({{ $enableBusuanzi | jsonify }});
     var busuanziPagePV = JSON.parse({{ $busuanziPagePV | jsonify }});
-    
-    if (enableBusuanzi && busuanziPagePV) {      
+
+    if (enableBusuanzi && busuanziPagePV) {
       $('#busuanzi_value_page_pv').digits();
-    }    
+    }
 
     var navbar = $('.navbar');
 
@@ -111,7 +111,7 @@
     var enableToc = JSON.parse({{ $enableToc | jsonify }});
     var toc = JSON.parse({{ $toc | jsonify }});
     var hideToc = JSON.parse({{ $hideToc | jsonify }});
-    
+
     if (enableToc || toc) {
       $('#TableOfContents > ul > li').each(function () {
         $(this).find('ul').css('display', 'none');
@@ -151,38 +151,6 @@
       });
     }
 
-    // Add link button for every
-    var text, clip = new ClipboardJS('.anchor');
-    var headers = $('.single__contents :header').not('h6').not('h5');
-    headers.append(function (index, html) {
-      var element = $(this);
-      var url = encodeURI(document.location.origin + document.location.pathname);
-      var link = url + "#" + element[0].id;
-      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
-        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
-        "</span>"
-        ;
-    });
-    headers.on('mouseenter', function () {
-      $(this).find('.anchor').attr('class', 'anchor');
-    });
-    headers.on('mouseleave', function () {
-      $(this).find('.anchor').attr('class', 'anchor hide');
-    });
-
-    $(".anchor").on('mouseleave', function (e) {
-      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
-    });
-
-    clip.on('success', function (e) {
-      e.clearSelection();
-      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
-    });
-    
-    $('.language-code').each(function (i, node) {
-      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
-    });
-
     // clipboard
     var clipInit = false;
     $('pre.chroma code, .language-code code').each(function () {
@@ -194,12 +162,12 @@
           var text, clip = new ClipboardJS('.copy-to-clipboard', {
             text: function (trigger) {
               console.log();
-              if ($(trigger).prev().find('code').length > 1) {                
+              if ($(trigger).prev().find('code').length > 1) {
                 text = $(trigger).prev().find(`code[class^="language-"]`).text();
               } else {
                 text = $(trigger).prev().find('code').text();
               }
-               
+
               return text.replace(/^\$\s/gm, '');
             }
           });
@@ -230,21 +198,21 @@
           if (curClassName && curClassName.startsWith(str)) {
             isNotAllowedIncluded = true;
             break;
-          } 
+          }
         }
-        
+
         if (!isNotAllowedIncluded) {
           if (curClassName) {
             code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
-          }         
-        }        
+          }
+        }
       }
     });
 
     // gallery
     {{ $enablePhotoSwipe := ($.Param "enablePhotoSwipe") }}
     var enablePhotoSwipe = JSON.parse({{ $enablePhotoSwipe | jsonify }});
-    
+
     if (enablePhotoSwipe) {
       var pswpElement = $('.pswp')[0];
       var imgElements = $('.single__contents').find('img');
@@ -301,7 +269,7 @@
       } else {
         mermaid.initialize({ theme: 'default' });
       }
-      
+
       let mermaids = [];
       [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
       for (i = 0; i < mermaids.length; i++) {
@@ -344,7 +312,7 @@
           diagram.drawSVG("flowchart"+index, options);
 
           index +=1;
-      });      
+      });
     }
 
     // mathjax
@@ -365,7 +333,7 @@
     // js-sequence-diagram
     if (lib && lib.includes('msc')) {
       {{ $msc := .Site.Data.msc }}
-      var options = JSON.parse({{ $msc | jsonify }});    
+      var options = JSON.parse({{ $msc | jsonify }});
 
       var index = 0;
       var chartPrefix = "language-msc";
@@ -415,7 +383,7 @@
         var ctx = document.getElementById('myChart' + index).getContext('2d');
         var myChart = new Chart(ctx, source);
         index += 1;
-      });            
+      });
     }
 
     // wavedrom
