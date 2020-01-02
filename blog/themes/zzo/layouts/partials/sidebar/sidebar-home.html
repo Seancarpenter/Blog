@@ -1,11 +1,11 @@
 {{ if $.Param "enableSidebar" }}
-<div class="sidebar">    
+<div class="sidebar">
     {{ partial "search/site-search" . }}
-    {{ partial "sidebar/site-bio" . }}    
+    {{ partial "sidebar/site-bio" . }}
     {{ partial "sidebar/custom-home" . }}
 
     {{ range (and (where .Site.Sections "Type" "!=" "about") (where .Site.Sections "Type" "!=" "archive")) }}
-    <section class="sidebar-recent">
+<!--     <section class="sidebar-recent">
         <a href="{{ .RelPermalink }}" class="sidebar-recent__title p2">{{ .Title }}</a>
         <ul class="sidebar-recent__ul">
             {{ if .Site.Params.itemsPerCategory }}
@@ -15,16 +15,16 @@
             {{ end }}
             {{ end }}
         </ul>
-    </section>
+    </section> -->
     {{ end }}
 </div>
 
-<hr class="hr-fade sidebar-hr" />
+<!-- <hr class="hr-fade sidebar-hr" /> -->
 <div class="taxo-root">
 {{ partial "taxonomy/taxonomy-tags" . }}
 {{ partial "taxonomy/taxonomy-categories" . }}
 {{ partial "taxonomy/taxonomy-series" . }}
 </div>
-<hr class="hr-fade sidebar-hr" />
+<!-- <hr class="hr-fade sidebar-hr" /> -->
 
 {{ end }}
