@@ -9,12 +9,11 @@ series:
 categories:
 -
 libraries:
-- katex 
+- katex
 - mathjax
 - chart
 - flowchartjs
 - msc
-- katex
 - mermaid
 - viz
 - wavedrom
