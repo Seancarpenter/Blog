@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat-black.woff2') format('woff2'),
+         url('../fonts/montserrat-black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('../fonts/source-sans-pro/source-sans-pro-regular.woff') format('woff')
+    font-weight: 400;
+    font-style: normal;
+}
