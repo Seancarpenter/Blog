@@ -1,6 +1,6 @@
 .archive {
   position: relative;
-  padding: 2rem 2rem 0;
+  padding: 2rem 3rem 0;
   width: 100%;
   @include flexbox();
   @include flex-direction(column);
@@ -35,7 +35,7 @@
   &__li {
     margin-bottom: 0.5rem;
     margin-left: 4rem;
-    z-index: 0;    
+    z-index: 0;
 
     @include transition(margin-left, 0.1s, ease);
     @include flexbox();
@@ -44,7 +44,7 @@
     @media only screen and (max-width: 769px) {
       margin-left: 0;
       position: relative;
-    }   
+    }
   }
 
   &__key {
@@ -75,7 +75,7 @@
   &__meta {
     border-radius: 0.25rem;
     min-width: 100px;
-    max-width: 100px;    
+    max-width: 100px;
 
     @include flexbox();
     @include align-items(center);
@@ -109,7 +109,7 @@
     width: 50%;
     height: 20px;
     line-height: 20px;
-    text-align: center;        
+    text-align: center;
 
     @include truncate(50px);
     @include themify($themes) {
@@ -123,18 +123,18 @@
   }
 
   &__title {
-    margin-right: 0.5rem;    
-    margin-left: 1rem;
+    margin-right: 0.5rem;
+    margin-left: -2rem;
 
     @include truncate($grid-max-width);
     @include on-event {
       &::before {
         content: '';
         position: absolute;
-        left: 3rem;                
+        left: 3rem;
         width: 0.25rem;
         height: 20px;
-        
+
         @include themify($themes) {
           background-color: themed('archive-hover-line-color');
         }
