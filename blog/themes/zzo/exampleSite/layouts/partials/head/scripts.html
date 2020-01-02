@@ -19,7 +19,7 @@
     {{ else }}
         var baseurl = "{{.Site.BaseURL}}";
     {{ end }}
-    
+
     var searchResults = null;
     var searchMenu = null;
     var fuse = null;
@@ -113,7 +113,7 @@
 
       if ($(window).width() < 770) {
         return null;
-      } 
+      }
 
       var results = fuse.search(e.target.value);
       renderSearchResults(results);
