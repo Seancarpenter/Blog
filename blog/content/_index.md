@@ -6,7 +6,7 @@ header:
     paddingY: 0
     align: center
     title:
-      - Various things
+      - Various Things
     subtitle:
       - A blog about various software engineering and computer science topics.
     titleFontSize: 44
