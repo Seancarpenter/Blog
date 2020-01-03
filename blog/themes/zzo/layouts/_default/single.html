@@ -4,28 +4,15 @@
 <script src="{{ $enquire.RelPermalink }}"></script>
 
 <main class="{{ if or ($.Param "enableToc") ($.Param "toc") }}{{ if $.Param "hideToc" }}main{{ else }}main-main{{ end }}{{ else }}main{{ end }}">
-  {{ if eq .Site.Params.enableBreadcrumb true }}
-  {{ partial "body/breadcrumb" . }}
-  {{ end }}
   <div class="single">
     <h2 class="single__title">{{ .Title }}</h2>
     <div class="single__meta">
       {{ partial "body/infos" . }}
-      {{ partial "body/tags" . }}
     </div>
     <article class="single__contents">
       {{ .Content }}
     </article>
-    {{ partial "body/donation" . }}
     {{ partial "body/whoami" . }}
-    {{ partial "body/related" . }}
-    {{ partial "pagination/pagination-single" . }}
-    {{ partial "comments/comments.html" . }}
-    {{ partial "body/photoswipe" . }}
-
-    <div class="hide">
-    {{ partial "search/site-search" . }}
-    </div>
   </div>
 </main>
 

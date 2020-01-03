@@ -4,7 +4,6 @@
 <script src="{{ $enquire.RelPermalink }}"></script>
 
 <main class="{{ if $.Param "enableSidebar" }}main-main{{ else }}main{{ end }}">
-    {{ partial "body/breadcrumb" . }}
     <article class="list">
         <header class="list__header">
             <h5 class="list__header--title h5">{{.Title}}</h5>
@@ -20,7 +19,7 @@
                 {{ .Render "summary" }}
             {{ end }}
         </div>
-    </article>    
+    </article>
 
     {{ partial "pagination/pagination" . }}
 </main>
