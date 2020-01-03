@@ -4,7 +4,7 @@
   max-width: inherit;
   height: $grid_navbar_height;
   z-index: z('navbar');
-  // position: fixed;
+  position: inherit; // Original: Fixed
   left: 0;
   right: 0;
   top: 0;
@@ -17,23 +17,23 @@
     background-color: themed('navbar-background-color');
   }
 
-  &--hide {
-    top: -$grid_navbar_height;
-  }
+  // &--hide {
+  //   top: -$grid_navbar_height;
+  // }
 
   &--show {
     top: 0;
   }
 
-  &__slide-down {
-    @media only screen and (min-width: 769px) {
-      @for $i from 1 through 8 {
-        &:nth-child(#{$i}) {
-          @include animation('slide-in-down .25s #{$i * .1}s 1 ease both');
-        }
-      }
-    }
-  }
+  // &__slide-down {
+  //   @media only screen and (min-width: 769px) {
+  //     @for $i from 1 through 8 {
+  //       &:nth-child(#{$i}) {
+  //         @include animation('slide-in-down .25s #{$i * .1}s 1 ease both');
+  //       }
+  //     }
+  //   }
+  // }
 
   &__brand {
     height: $grid_navbar_height;
@@ -45,13 +45,13 @@
 
   &__burger {
     display: none;
-    position: relative;
+    position: auto;
 
     @include animation('slide-in-down .5s .0s 1 ease both');
     @media only screen and (max-width: 769px) {
       cursor: pointer;
       margin-left: auto;
-      position: relative;
+      position: auto;
       height: $grid_navbar_height;
       width: 35px;
 
