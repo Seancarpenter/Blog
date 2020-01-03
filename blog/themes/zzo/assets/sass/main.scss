@@ -47,7 +47,6 @@ $content-font: {{ .Site.Data.font.content_font }};
 
 @import 'components/alert';
 @import 'components/bio';
-@import 'components/breadcrumb';
 @import 'components/diagram';
 @import 'components/expand';
 @import 'components/gtt';
@@ -64,8 +63,6 @@ $content-font: {{ .Site.Data.font.content_font }};
 @import 'components/toc';
 @import 'components/tooltip';
 @import 'components/whoami';
-@import 'components/busuanzi';
-@import 'components/donation';
 @import 'components/box';
 
 @import 'pages/404';
