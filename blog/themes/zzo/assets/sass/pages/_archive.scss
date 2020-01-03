@@ -74,8 +74,8 @@
 
   &__meta {
     border-radius: 0.25rem;
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 50px;
+    max-width: 50px;
 
     @include flexbox();
     @include align-items(center);
@@ -104,9 +104,9 @@
 
   &__date {
     border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    // border-bottom-right-radius: 0.25rem;
     font-size: 0.8rem;
-    width: 50%;
+    width: 100%;
     height: 20px;
     line-height: 20px;
     text-align: center;
@@ -117,31 +117,30 @@
       background-color: themed('archive-type-background-color');
 
       @media only screen and (max-width: 769px) {
-        border-left: 2px solid themed('toc-vertical-line');
+        border-left: 0px solid themed('toc-vertical-line');
       }
     }
   }
 
   &__title {
-    margin-right: 0.5rem;
-    margin-left: -2rem;
+    // margin-right: 1rem;
+    margin-left: 1rem;
 
     @include truncate($grid-max-width);
+    // Controls the little light that lights up on the side
     @include on-event {
       &::before {
-        content: '';
-        position: absolute;
-        left: 3rem;
-        width: 0.25rem;
-        height: 20px;
 
-        @include themify($themes) {
-          background-color: themed('archive-hover-line-color');
-        }
+        @media only screen and (min-width: 769px) {
+          content: '';
+          position: absolute;
+          left: 3rem;
+          width: 0.25rem;
+          height: 30px;
 
-        @media only screen and (max-width: 769px) {
-          top: 50%;
-          @include translateY(-50%);
+          @include themify($themes) {
+            background-color: themed('archive-hover-line-color');
+          }
         }
       }
     }
