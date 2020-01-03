@@ -23,6 +23,12 @@ This article offers a sample of basic Markdown syntax that can be used in Hugo c
 
 ## Headings
 
+<img src="/logo.png" style="margin-left: 0px" alt="Robot">
+
+![Alt text](/logo.png)
+
+
+
 The following HTML `<h1>`—`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level while `<h6>` is the lowest.
 
 # H1
@@ -72,7 +78,7 @@ Tables aren't part of the core Markdown spec, but Hugo supports supports them ou
 
 ## Code Blocks
 
-#### Code block with backticks
+### Code block with backticks
 
 ```
 html
@@ -87,7 +93,7 @@ html
 </body>
 </html>
 ```
-#### Code block indented with four spaces
+### Code block indented with four spaces
 
     <!DOCTYPE html>
     <html lang="en">
@@ -128,19 +134,19 @@ primes = generate_primes(100000)
 
 ## List Types
 
-#### Ordered List
+### Ordered List
 
 1. First item
 2. Second item
 3. Third item
 
-#### Unordered List
+### Unordered List
 
 * List item
 * Another item
 * And another item
 
-#### Nested list
+### Nested list
 
 * Item
 1. First Sub-item
