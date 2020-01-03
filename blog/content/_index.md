@@ -6,9 +6,9 @@ header:
     paddingY: 0
     align: center
     title:
-      - Various Things
+      - Opinionator
     subtitle:
-      - A blog about various software engineering and computer science topics.
+      - A blog about various computer science and software engineering topics.
     titleFontSize: 44
     subtitleFontSize: 16
     spaceBetweenTitleSubtitle: 20
