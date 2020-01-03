@@ -1,7 +1,6 @@
 {{ if $.Param "enableSidebar" }}
 
 <div class="sidebar">
-    {{ partial "search/site-search" . }}
     {{ partial "sidebar/custom-list" . }}
     {{ if .Site.Params.itemsPerCategory }}
     {{ range first .Site.Params.itemsPerCategory .Pages }}
