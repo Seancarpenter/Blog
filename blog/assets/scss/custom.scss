@@ -1,12 +1,12 @@
 /* The top part of the code blocks */
 .theme__dark .single__contents pre > code::before {
-    background-color: #f7f7f7 !important;
-    color: #282A3A !important;
+    background-color: #403E41 !important;
+    color: #FFFFFF !important;
 }
 
 /* The main part of the code blocks*/
 .theme__dark :not(.chroma) code, .theme__dark :not(.chroma) pre {
-    background-color: #1e1f29 !important;
+    background-color: #212121 !important;
     color: #FFFFFF !important;
 }
 /* Change the current themes main text color to match the code blocks color. */
@@ -16,5 +16,5 @@
 
 /* The table header color */
 .theme__dark .single__contents .table-wrapper > table thead {
-    background-color: #1e1f29 !important;
+    background-color: #212121 !important;
 }
