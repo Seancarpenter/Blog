@@ -7,7 +7,7 @@ defaultContentLanguageInSubdir = true # baseURL/en/, baseURL/kr/ ...
 hasCJKLanguage = false # Set `true` for Chinese/Japanese/Korean languages.
 
 summaryLength = 70 # The length of a post description on a list page.
-
+enableRobotsTXT = true
 # copyright = "©{year}, All Rights Reserved" # copyright symbol: $copy; current year: {year}
 timeout = 10000
 enableEmoji = true
