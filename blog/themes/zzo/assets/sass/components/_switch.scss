@@ -7,7 +7,7 @@
   margin-left: 1rem;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
@@ -32,7 +32,7 @@
   height: 11px;
   width: 11px;
   left: 1.72px;
-  bottom: 1.72px;  
+  bottom: 1.72px;
   @include transition(all, 0.2s, ease);
   @include themify($themes) {
     background-color: themed('switch-button-color');
@@ -48,7 +48,7 @@ input:checked + .slider {
 input:focus + .slider {
   @include themify($themes) {
     box-shadow: 0 0 1px themed('switch-active-color');
-  }  
+  }
 }
 
 input:checked + .slider:before {

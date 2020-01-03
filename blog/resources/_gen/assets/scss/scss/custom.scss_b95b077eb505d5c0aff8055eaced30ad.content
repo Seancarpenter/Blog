@@ -1,0 +1,1 @@
+.theme__dark .single__contents pre>code::before{background-color:#f7f7f7!important;color:#282a3a!important}.theme__dark :not(.chroma) code,.theme__dark :not(.chroma) pre{background-color:#1e1f29!important;color:#fff!important}.theme__dark .chroma .c1{color:#fff!important}.theme__dark .single__contents .table-wrapper>table thead{background-color:#1e1f29!important}

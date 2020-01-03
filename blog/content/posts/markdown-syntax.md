@@ -101,17 +101,29 @@ html
     </html>
 
 #### Code block with Hugo's internal highlight shortcode
-{{< highlight html >}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Example HTML5 Document</title>
-</head>
-<body>
-  <p>Test</p>
-</body>
-</html>
+{{< highlight python >}}
+import math
+# A simple implementation of the Sieve of Eratosthenes
+# https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+# Key limitation: The Sieve of Eratosthenes has a memory complexity of O(n), where n is the size of the prime number.
+# O(n * log(log(n))) (the reasoning why is quite complex, see the wiki article).
+
+
+def generate_primes(n):
+    table = [True for x in range(n)]
+    for i in range (2, int(math.sqrt(n))):
+        if table[i]:
+            for j in range(i*2, n, i):
+                table[j] = False
+
+    # Return a dict to make searches an O(1) operation.
+    primes = {x for x in range(len(table)) if table[x] == True}
+    return primes
+
+def is_prime(n):
+    return n in primes
+
+primes = generate_primes(100000)
 {{< /highlight >}}
 
 ## List Types

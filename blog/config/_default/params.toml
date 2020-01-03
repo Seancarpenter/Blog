@@ -1,6 +1,6 @@
 logoText = "Opinionator" # Logo text that appears in the site navigation bar.
 description = "An opinionated blog about various computer science and software engineering related topics." # for SEO
-custom_css = ["css/font.css"] # custom_css = ["scss/custom.scss"] and then make file at root/assets/scss/custom.scss
+custom_css = ["css/font.css", "scss/custom.scss"] # custom_css = ["scss/custom.scss"] and then make file at root/assets/scss/custom.scss
 custom_js = [] # custom_js = ["js/custom.js"] and then make file at root/assets/js/custom.js
 
 # header
