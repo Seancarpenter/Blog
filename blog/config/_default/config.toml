@@ -8,7 +8,7 @@ hasCJKLanguage = false # Set `true` for Chinese/Japanese/Korean languages.
 
 summaryLength = 70 # The length of a post description on a list page.
 
-copyright = "©{year}, All Rights Reserved" # copyright symbol: $copy; current year: {year}
+# copyright = "©{year}, All Rights Reserved" # copyright symbol: $copy; current year: {year}
 timeout = 10000
 enableEmoji = true
 paginate = 10 # Number of items per page in paginated lists.
