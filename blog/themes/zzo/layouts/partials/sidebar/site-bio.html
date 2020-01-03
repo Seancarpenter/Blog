@@ -61,16 +61,6 @@
     <a href="{{ .Site.Params.link }}" target="_blank" rel="noreferrer">{{ .Site.Params.link }}</a>
   </div>
   {{ end }}
-
-<!--   <div class="bio__social">
-    {{ range $name, $path := $.Param "socialOptions" }}
-      {{ if (and $path (ne $name "email")) }}
-      <a href="{{ $path | safeURL }}" title="{{ $name }}" aria-label="{{ $name }}">
-        {{ partial (print "svgs/social/" $name ".svg") (dict "width" 25 "height" 25) }}
-      </a>
-      {{ end }}
-    {{ end }}
-  </div> -->
 </section>
 <hr class="hr-fade sidebar-hr"/>
 {{ end }}
