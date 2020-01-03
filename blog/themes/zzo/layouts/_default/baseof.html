@@ -5,11 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ block "title" . }}{{ .Title }} – {{ .Site.Title }}{{ end }}</title>
-    {{ partial "head/scripts" . }}    
+    {{ partial "head/scripts" . }}
     {{ partialCached "head/styles" . }}
     {{ partial "head/meta" . }}
     {{ partial "head/meta_json_ld" . }}
-    {{ partial "head/services" . }}
     {{ partial "head/custom-head" . }}
 </head>
 
@@ -18,9 +17,9 @@
         var localTheme = localStorage.getItem('theme');
         if (localTheme) {
             document.getElementById('root').className = `theme__${localTheme}`;
-        }        
-    </script>    
-    
+        }
+    </script>
+
     <div id="body">
         {{ partial "body/custom-wrapper" . }}
         <div class="container wrapper">
@@ -29,7 +28,7 @@
             {{ block "main" . }}{{ end }}
             {{ partial "body/custom-body" . }}
             {{ partial "footer/site-footer" . }}
-        </div>    
+        </div>
     </div>
 </body>
 
