@@ -1,8 +1,8 @@
 .summary-card {
   margin: 0 0.5rem;
   padding: 0 0.5rem;
-  
-  .title {    
+
+  .title {
     a {
       font-family: $title-font;
       font-weight: 700;
@@ -36,7 +36,7 @@
   &__image {
     width: 100%;
     height: 100%;
-   
+
     &-wrapper {
       height: 100%;
       width: auto;
@@ -65,7 +65,7 @@
   }
   &:not(:last-child) {
     hr {
-      margin-bottom: 4rem;      
+      margin-bottom: 4rem;
     }
   }
   &:last-child {
@@ -76,9 +76,9 @@
 }
 
 .summary-classic {
-  padding: 0 1rem;  
+  padding: 0 1rem;
   .title {
-    font-size: 24px;    
+    font-size: 24px;
     a {
       font-family: $title-font;
       font-weight: 700;
@@ -120,7 +120,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-        
+
     &-wrapper {
       max-width: 130px;
       min-width: 130px;
@@ -142,10 +142,10 @@
 
   &:not(:last-child) {
     hr {
-      margin-bottom: 1.5rem;      
+      margin-bottom: 1.5rem;
     }
   }
-  
+
   &:last-child {
     hr {
       display: none;
