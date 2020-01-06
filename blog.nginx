@@ -71,4 +71,3 @@ server {
     #   deny all;
     #}
 }
-root@blog-ubuntu-1vcpu-1gb-nyc1-01:/etc/nginx/sites-enabled#
