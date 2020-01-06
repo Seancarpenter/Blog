@@ -1,6 +1,6 @@
 ### Overview
 
-Source code for my personal blog, hosted at http://www.seancarpenter.io
+Source code for my personal blog, hosted at https://www.seancarpenter.io
 
 To fetch the this repo and associated submodules (such as the zzo theme), call:
 
