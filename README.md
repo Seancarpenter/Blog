@@ -88,3 +88,7 @@ Resources
     # Lastly, register your certbot and automatically update your Nginx configuration with the SSL Certification Information.
 
     sudo certbot --nginx
+
+### Deploy Changes
+
+To deploy changes, just run `update.sh` while sshed into the repo as a user with sudo privileges.
