@@ -87,4 +87,4 @@ Resources
 
 ### Deploy Changes
 
-To deploy changes, just run `update.sh` while sshed into the repo as a user with sudo privileges.
+To deploy changes, just run `update.sh` while sshed into the repo as a user with sudo privileges. Important to note, you'll need to move the update.sh script outside of the repository first.
