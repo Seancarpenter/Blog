@@ -17,36 +17,40 @@ Resources
     - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
     - https://gideonwolfe.com/posts/sysadmin/hugonginx/
 
-    sudo apt-get update
-
     # This installs the latest version of Hugo and may eventually break.
     # `apt-get` installs an old version of Hugo that does not work with this repository, so snap
     # is being used instead.
 
+    sudo apt-get update
     snap install hugo
-
     sudo apt-get install nginx
 
     # Make an exception for NGINX in our Firewall.
+
     sudo ufw allow 'Nginx Full'
 
     # Clone the repo into your home directory.
+
     cd ~
     git clone https://github.com/Seancarpenter/Blog
 
     # Generate the actual static site inside of the blog repo.
+
     cd Blog/blog
     hugo
 
     # Copy the site to your /var/www directory.
+
     sudo mkdir -p /var/www/seancarpenter.io/html
     cp Blog/blog /var/www/seancarpenter.io/html/blog
 
     # Assign the correct access rights to the folder.
+
     sudo chown -R $USER:$USER /var/www/seancarpenter.io/html
     sudo chmod -R 755 /var/www/seancarpenter.io
 
     # Create the nginx configuration file for the website.
+
     cd /etc/nginx/sites-available/
     cp default blog
     vim blog
@@ -78,7 +82,9 @@ Resources
     sudo apt-get update
 
     # Then you'll need to install it
+
     sudo apt-get install certbot python-certbot-nginx
 
     # Lastly, register your certbot and automatically update your Nginx configuration with the SSL Certification Information.
+
     sudo certbot --nginx
