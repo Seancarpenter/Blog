@@ -12,7 +12,10 @@ This project was built using Hugo Version 0.62
 
 ### Deploying The Static Website to an Ubuntu Droplet on Digital Ocean
 
-See here: https://gideonwolfe.com/posts/sysadmin/hugonginx/
+Resources
+
+    - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
+    - https://gideonwolfe.com/posts/sysadmin/hugonginx/
 
     sudo apt-get update
 
