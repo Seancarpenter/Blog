@@ -32,7 +32,6 @@
       min-width: 150px;
       max-width: 150px;
       height: auto;
-      margin-right: 1rem;
 
       @include flexbox();
       @include flex-direction(column);
@@ -53,9 +52,11 @@
   &__desc {
     font-size: 1rem;
     padding-left: 0.25rem;
+    text-align: center;
 
     @media only screen and (max-width: 769px) {
       width: 100%;
+
     }
   }
 
