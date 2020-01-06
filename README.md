@@ -66,3 +66,19 @@ Resources
     # If you make any changes to the NGINX configuration file, you will need to refresh NGINX after doing so by running:
 
     sudo service nginx restart
+
+### Setting up SSL through Certbot and Letsencrypt
+
+    # First you'll need to run these instructions to download certbot.
+
+    sudo apt-get update
+    sudo apt-get install software-properties-common
+    sudo add-apt-repository universe
+    sudo add-apt-repository ppa:certbot/certbot
+    sudo apt-get update
+
+    # Then you'll need to install it
+    sudo apt-get install certbot python-certbot-nginx
+
+    # Lastly, register your certbot and automatically update your Nginx configuration with the SSL Certification Information.
+    sudo certbot --nginx
