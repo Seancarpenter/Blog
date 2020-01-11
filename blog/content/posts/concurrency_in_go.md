@@ -2,7 +2,7 @@
 title = "Concurrency In Go"
 description = "A brief and pragmatic introduction to concurrency in Go."
 type = "post"
-date = "2020-01-07"
+date = "2020-02-01"
 featured_image = "feature/opinionator.png"
 +++
 
