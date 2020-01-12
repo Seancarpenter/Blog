@@ -122,10 +122,12 @@
     object-fit: contain;
 
     &-wrapper {
-      max-width: 130px;
-      min-width: 130px;
+      max-width: 125px;
+      min-width: 125px;
+      max-height: 125px;
+      min-height: 125px;
       overflow: hidden;
-      border-radius: 0.25rem;
+      border-radius: 0.5rem;
       @include align-self(center);
       @include on-event {
         @include box-shadow(1px, 1px, 3px, 0px, rgba(0, 0, 0, 0.25));
