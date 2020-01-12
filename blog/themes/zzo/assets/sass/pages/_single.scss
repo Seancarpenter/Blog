@@ -56,7 +56,7 @@
 
     font-size: 1rem;
     font-family: $content-font;
-    margin: 0rem 0;
+    margin: 1rem 0;
     line-height: 1.7;
     width: inheirt;
     max-width: inherit;
@@ -80,12 +80,12 @@
 
     h1 {
       font-size: 2.6rem;
-      margin: 2.5rem 0 1.75rem 0;
+      margin: 2.5rem 0 1.3rem 0;
     }
 
     h2 {
       font-size: 2.2rem;
-      margin: 2.2rem 0 1.5rem 0;
+      margin: 2.2rem 0 1.00rem 0;
       padding: 0;
       color: inherit;
       font-weight: 900;
@@ -94,12 +94,12 @@
 
     h3 {
       font-size: 1.8rem;
-      margin: 1.8rem 0 1.25rem 0;
+      margin: 1.8rem 0 0.85rem 0;
     }
 
     h4 {
       font-size: 1.5rem;
-      margin: 1.4rem 0 1rem 0;
+      margin: 1.4rem 0 0.65rem 0;
     }
 
     h5 {
@@ -254,6 +254,7 @@
     ul {
       margin-right: 0;
       margin-top: 0;
+      margin-bottom: 1.75rem;
       padding: 0;
       list-style: disc outside none;
     }
