@@ -12,9 +12,12 @@ Go (or Golang) is a relatively new language developed at Google that's garnered 
 - [Hugo](https://github.com/gohugoio/hugo): A static site generator that uses a sort of advanced markdown syntax to generate HTML. This website was built using Hugo!
 
 If you already know Go, but want to improve your understanding of how to use its concurrency features, then read on. If you do not know Go, I'd recommend you first start off with the [Tour of Go](https://tour.golang.org/welcome/1), an interactive introduction to the language, as this post will assume you already know the basics. This introduction will also assume you understand the basics of concurrency. If you do not have a good understanding of how concurrency works, I'd first recommend you read the concurrency section in [OSTEP](http://pages.cs.wisc.edu/~remzi/OSTEP/), an awesome free operating systems textbook.
-All that aside, lets take a look at the built-in concurrency features that make Go an exceptional language.
+With that out of the way, lets take a look at the built-in concurrency features that make Go an exceptional language.
 
 ## Goroutines
+
+Just as it'd be impossible to talk about concurrency without talking about threads, it would impossible to talk about Go's concurrency model without talking about Goroutines. Goroutines can be thought of as extremely light weight threads. Running a goroutine is as simple as adding the keyword `go` before a function call.
+
 {{< highlight go >}}
 func main() {
     go doWork(0)
@@ -28,6 +31,14 @@ func doWork(worker int) {
     fmt.Printf("Worker %d: Jobs Done! \n", worker)
 }
 {{< /highlight >}}
+```
+Worker 0: Jobs Done!
+Worker 2: Jobs Done!
+Worker 1: Jobs Done!
+```
+
+It's important to note that any goroutines still alive when the main thread terminates will be unable to exit gracefully. With this in mind, it should be easy to spot the race condition in the previous code snippet.
+
 ## Channel
 {{< highlight go >}}
 func main() {
@@ -156,3 +167,11 @@ func doWork(semaphore chan struct{}, worker int) {
     <-semaphore // Unblocks here.
 }
 {{< /highlight >}}
+
+
+## Additional Resources
+
+- Rob Pike - [Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide#1)
+- Rob Pike - [Concurrency Is Not Parallelism](https://vimeo.com/49718712)
+
+If you'd like to run the code exhibited in this post yourself, you can find it all [here](https://github.com/Seancarpenter/blog-content/tree/master/2020/concurrency_in_go).
