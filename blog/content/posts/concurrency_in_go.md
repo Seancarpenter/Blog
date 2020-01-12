@@ -59,12 +59,18 @@ func doWork(c chan string, worker int) {
     c <- fmt.Sprintf("Worker %d: Jobs Done!", worker)
 }
 {{< /highlight >}}
+
+```
+Worker 1: Jobs Done!
+Worker 2: Jobs Done!
+```
+
 ## Waitgroup
 {{< highlight go >}}
 func main() {
     var wg sync.WaitGroup
 
-    for i := 0; i < 10; i++ {
+    for i := 0; i < 5; i++ {
         wg.Add(1)
         go doWork(&wg, i)
     }
@@ -74,7 +80,7 @@ func main() {
 }
 
 func doWork(wg *sync.WaitGroup, worker int) {
-    r := rand.Intn(10)
+    r := rand.Intn(5)
     time.Sleep(time.Duration(r) * 100 * time.Millisecond)
 
     fmt.Printf("Worker %d: Jobs Done!\n", worker)
@@ -82,6 +88,13 @@ func doWork(wg *sync.WaitGroup, worker int) {
     wg.Done()
 }
 {{< /highlight >}}
+```
+Worker 1: Jobs Done!
+Worker 0: Jobs Done!
+Worker 4: Jobs Done!
+Worker 2: Jobs Done!
+Worker 3: Jobs Done!
+```
 ## Select
 {{< highlight go >}}
 func main() {
@@ -111,6 +124,13 @@ func createJobs(jobs chan int, quit chan bool) {
     quit <- true // Signal that we're done.
 }
 {{< /highlight >}}
+```
+Job 1 Complete!
+Job 2 Complete!
+Job 3 Complete!
+
+All Done!
+```
 ## Mutex
 {{< highlight go >}}
 type safeNum struct {
@@ -140,6 +160,9 @@ func increment(wg *sync.WaitGroup, sf *safeNum) {
     wg.Done()
 }
 {{< /highlight >}}
+```
+Result: 100
+```
 ## Semaphore (Bonus)
 {{< highlight go >}}
 func main() {
@@ -167,7 +190,23 @@ func doWork(semaphore chan struct{}, worker int) {
     <-semaphore // Unblocks here.
 }
 {{< /highlight >}}
-
+```
+Worker 1 : is waiting...
+Worker 1 : has entered the critical section.
+Worker 2 : is waiting...
+Worker 2 : has entered the critical section.
+Worker 3 : is waiting...
+Worker 3 : has entered the critical section.
+Worker 4 : is waiting...
+Worker 1 : has left the critical section.
+Worker 4 : has entered the critical section.
+Worker 5 : is waiting...
+Worker 2 : has left the critical section.
+Worker 5 : has entered the critical section.
+Worker 6 : is waiting...
+Worker 3 : has left the critical section.
+Worker 6 : has entered the critical section.
+```
 
 ## Additional Resources
 
