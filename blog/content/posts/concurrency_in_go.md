@@ -5,7 +5,6 @@ type = "post"
 date = "2020-01-10"
 featured_image = "feature/opinionator.png"
 +++
-A brief and pragmatic introduction to concurrency in Go.
 ## Introduction
 
 Go (or Golang) is a relatively new language developed at Google that's garnered a lot of attention in the last few years for its simplicity, speed, and powerful concurrency features. In a rather short amount of time, a slew of extremely popular and performant applications have been built using Go. To name a few:

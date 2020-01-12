@@ -22,7 +22,7 @@
     @include flexbox();
     @include align-items(center);
     @include flex-wrap(wrap);
-    @include flex-grow(1);    
+    @include flex-grow(1);
     @include themify($themes) {
       color: themed('meta-color');
     }
@@ -56,7 +56,7 @@
 
     font-size: 1rem;
     font-family: $content-font;
-    margin: 1rem 0;
+    margin: 0rem 0;
     line-height: 1.7;
     width: inheirt;
     max-width: inherit;
@@ -66,7 +66,7 @@
     h4,
     h5,
     h6 {
-      position: relative;      
+      position: relative;
       line-height: 1.25;
       font-family: $title-font;
     }
@@ -80,36 +80,36 @@
 
     h1 {
       font-size: 2.6rem;
-      margin: 3.5rem 0 1.75rem 0;
+      margin: 2.5rem 0 1.75rem 0;
     }
 
     h2 {
       font-size: 2.2rem;
-      margin: 3.2rem 0 1.5rem 0;
+      margin: 2.2rem 0 1.5rem 0;
       padding: 0;
       color: inherit;
       font-weight: 900;
-      text-rendering: optimizeLegibility;      
+      text-rendering: optimizeLegibility;
     }
 
     h3 {
       font-size: 1.8rem;
-      margin: 2.8rem 0 1.25rem 0;
+      margin: 1.8rem 0 1.25rem 0;
     }
 
     h4 {
       font-size: 1.5rem;
-      margin: 2.4rem 0 1rem 0;
+      margin: 1.4rem 0 1rem 0;
     }
 
     h5 {
       font-size: 1.2rem;
-      margin: 2rem 0 0.8rem 0;
+      margin: 1rem 0 0.8rem 0;
     }
 
     h6 {
       font-size: 1rem;
-      margin: 1.5rem 0 0.5rem 0;
+      margin: 0.5rem 0 0.5rem 0;
     }
 
     pre {
@@ -131,7 +131,7 @@
         }
       }
     }
-    
+
     pre > code:not([class^=language]) {
       &::before {
         position: absolute;
@@ -146,7 +146,7 @@
         font-family: $title-font;
         font-weight: bold;
         display: inline-block;
-        text-transform: capitalize;      
+        text-transform: capitalize;
         content: 'Code';
 
         @include themify($codeblock) {
@@ -180,7 +180,7 @@
       height: 1.45rem;
       top: -1px;
       vertical-align: middle;
-      position: relative;      
+      position: relative;
       margin-left: -0.2rem;
       cursor: pointer;
       border-radius: 0 2px 2px 0;
@@ -196,7 +196,7 @@
     .chroma .copy-to-clipboard {
       position: absolute;
       right: 4px;
-      top: 5px;      
+      top: 5px;
       border-radius: 2px;
       z-index: z('clipboard');
       @include transition(all, 0.2s, ease);
@@ -207,7 +207,7 @@
     .language-code .copy-to-clipboard {
       position: absolute;
       right: 4px;
-      top: 5px;      
+      top: 5px;
       border-radius: 2px;
       z-index: z('clipboard');
       @include transition(all, 0.2s, ease);
@@ -224,7 +224,7 @@
       color: inherit;
       opacity: 0.8;
       position: relative;
-      
+
       @include themify($themes) {
           border-left: 0.32813rem solid themed("single-blockquote-border-color");
       }
@@ -243,7 +243,7 @@
 
     p {
       margin: 0 0 1.75rem 0;
-      padding: 0;      
+      padding: 0;
 
       code {
         padding: 3px 5px;
@@ -301,7 +301,7 @@
     }
 
     .table-wrapper {
-      overflow-x: auto;      
+      overflow-x: auto;
 
       > table {
         max-width: 100%;
@@ -309,14 +309,14 @@
         border-spacing: 0;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.125);
 
-        
+
         @include themify($codeblock) {
           thead {
             background: themed('content-pre-header-background-color');
           }
 
           th {
-            color: themed('content-pre-header-color');            
+            color: themed('content-pre-header-color');
           }
 
           th, td {
@@ -351,7 +351,7 @@
   }
 }
 
-code, pre {  
+code, pre {
   padding: .5rem 0;
   line-height: 1.4;
   font-size: $code-font-size;
@@ -374,8 +374,8 @@ code, pre {
   }
 }
 
-code {  
-  padding: 3px 5px;  
+code {
+  padding: 3px 5px;
   border-radius: 4px;
 }
 
@@ -429,7 +429,7 @@ pre:not(.chroma) {
   code {
     padding: 0;
   }
-  
+
   code[data-lang] {
     &::before {
       position: absolute;
@@ -444,7 +444,7 @@ pre:not(.chroma) {
       font-family: $title-font;
       font-weight: bold;
       display: inline-block;
-      text-transform: capitalize;      
+      text-transform: capitalize;
       content: attr(data-lang);
 
       @include themify($codeblock) {
@@ -486,7 +486,7 @@ pre:not(.chroma) {
     border-collapse: collapse;
   }
 
-  /* LineNumbersTable */  
+  /* LineNumbersTable */
   .lnt {
     @include themify($codeblock) {
       color: themed('content-pre-number-color');
