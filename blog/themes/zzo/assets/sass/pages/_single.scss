@@ -111,9 +111,9 @@
       font-size: 1rem;
       margin: 0.5rem 0 0.5rem 0;
     }
-
+    // *-*-*
     pre {
-      padding: 34px 12px 8px;
+      padding: 8px 12px 8px;
       overflow: auto;
       border-radius: 0.34rem;
     }
@@ -396,6 +396,7 @@ pre:not(.chroma) {
   }
 
   &::after {
+    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -414,6 +415,10 @@ pre:not(.chroma) {
     }
   }
 }
+.theme__dark .single__contents pre > code::before {
+    display: none;
+}
+
 
 .highlight > .chroma {
   margin: 1em 0;
