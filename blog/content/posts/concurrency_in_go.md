@@ -19,6 +19,9 @@ With that out of the way, lets take a look at the built-in concurrency features 
 Just as it'd be impossible to talk about concurrency without talking about threads, it would impossible to talk about Go's concurrency model without talking about Goroutines. Goroutines can be thought of as extremely light weight threads. Running a goroutine is as simple as adding the keyword `go` before a function call.
 
 {{< highlight go >}}
+import "fmt"
+import "time"
+
 func main() {
     go doWork(0)
     go doWork(1)
@@ -48,6 +51,9 @@ After goroutines, channels are easily the most useful concurrency feature that G
 `x = <-c` will assign x to the oldest value in the channel `c`
 
 {{< highlight go >}}
+import "fmt"
+import "time"
+
 func main() {
     c := make(chan string)
 
@@ -90,10 +96,21 @@ Lastly, although channels have no maximum size by default, you can specify one b
 c := make(chan string, 10)
 {{< /highlight >}}
 
-As one might expect, just as trying to retrieve an element from an empty channel will block a goroutine, so will trying to place an object into a full channel. Unsurprisingly, we can (and will!) be able to use this behaviour to our advantage.
+As one might expect, just as trying to retrieve a value from an empty channel will block a goroutine, so will trying to place a value into a full channel. Unsurprisingly, we can (and will!) be able to use this behaviour to our advantage.
 
 ## Waitgroups
+Waitgroups are a handy tool from the sync library that allow us to model situations where we want a goroutine to block until some specified amount of work has been completed. At their core, waitgroups are just thread-safe counters with three important operations:
+
+`wg.Add(n)` increments the waitgroup `wg` by n
+`wg.Done()` decrements the waitgroup `wg` by 1
+`wg.Wait()` blocks the current thread until the waitgroup counter equals 0
+
 {{< highlight go >}}
+import "fmt"
+import "math/rand"
+import "sync"
+import "time"
+
 func main() {
     var wg sync.WaitGroup
 
@@ -122,6 +139,8 @@ Worker 4: Jobs Done!
 Worker 2: Jobs Done!
 Worker 3: Jobs Done!
 ```
+As a precaution, it's very easy to write code that deadlocks when using waitgroups. A simple off by one error is all you'd need to force our previous example to deadlock.
+
 ## Select
 {{< highlight go >}}
 func main() {
