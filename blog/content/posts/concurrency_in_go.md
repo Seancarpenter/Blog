@@ -73,7 +73,7 @@ Worker 1: Jobs Done!
 Worker 2: Jobs Done!
 ```
 
-In addition to being handy tools for communicating data between goroutines, retrieving values from channels is a **blocking** operation. This means that any attempt to retrieve a value from an empty queue will block until a value is placed into that queue by a different goroutine. While this feature makes channels an extremely powerful tool for coordinating between multiple goroutines, it can also lead to deadlocks if you're not careful. For example, trying to retrieve a value from a channel that never has anything placed into it is guaranteed to deadlock:
+Part of what makes channels so useful is the fact that retrieving a value from a channel is a **blocking** operation. This means that any attempt to retrieve a value from an empty channel will block until a value is placed into that channel by a different goroutine. While this feature makes channels an extremely powerful tool for coordinating between multiple goroutines, it can also lead to deadlocks if you're not careful. For example, trying to retrieve a value from a channel that never has anything placed into it is guaranteed to deadlock:
 
 {{< highlight go >}}
 func main() {
@@ -84,6 +84,13 @@ func main() {
 ```
 fatal error: all goroutines are asleep - deadlock!
 ```
+
+Lastly, although channels have no maximum size by default, you can specify one by adding passing an additional argument to the make function. The below call to the make function creates a channel that can store a maximum of 10 items.
+{{< highlight go >}}
+c := make(chan string, 10)
+{{< /highlight >}}
+
+As one might expect, just as trying to retrieve an element from an empty channel will block a goroutine, so will trying to place an object into a full channel. Unsurprisingly, we can (and will!) be able to use this behaviour to our advantage.
 
 ## Waitgroups
 {{< highlight go >}}
