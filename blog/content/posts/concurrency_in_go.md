@@ -39,9 +39,14 @@ Worker 1: Jobs Done!
 
 It's important to note that any goroutines still alive when the main thread terminates will be unable to exit gracefully. With this in mind, it should be easy to spot the race condition in the previous code snippet.
 
-Additionally, we're using the `time.sleep()` function to simulate doing "work". In the real world, "work" could be fetching an image from a URL, writing a file to a disk, or anything that takes time really. From our perspective however, it doesn't really matter what it is we're doing, so the `time.sleep()` serves our purpose perfectly.
+Additionally, we're using the `time.sleep()` function to simulate doing "work". In the real world, "work" could be fetching an image from a URL, writing a file to a disk, or anything that takes time really. From our perspective however, it doesn't really matter what it is we're doing, so `time.sleep()` serves our purpose perfectly.
 
-## Channel
+## Channels
+After goroutines, channels are easily the most useful concurrency feature that Go has to offer. Channels are typed, thread-safe queues that make passing values between goroutines extremely easy. Placing values into channels is accomplished by directing the data you wish to pass into or out of the channel using arrow notation. Put plainly,
+
+`c <- 10` will place the value `10` into the channel `c`
+`x = <-c` will assign x to the oldest value in the channel `c`
+
 {{< highlight go >}}
 func main() {
     c := make(chan string)
@@ -62,12 +67,25 @@ func doWork(c chan string, worker int) {
 }
 {{< /highlight >}}
 
+
 ```
 Worker 1: Jobs Done!
 Worker 2: Jobs Done!
 ```
 
-## Waitgroup
+In addition to being handy tools for communicating data between goroutines, retrieving values from channels is a **blocking** operation. This means that any attempt to retrieve a value from an empty queue will block until a value is placed into that queue by a different goroutine. While this feature makes channels an extremely powerful tool for coordinating between multiple goroutines, it can also lead to deadlocks if you're not careful. For example, trying to retrieve a value from a channel that never has anything placed into it is guaranteed to deadlock:
+
+{{< highlight go >}}
+func main() {
+    c := make(chan string)
+    x := <-c
+}
+{{< /highlight >}}
+```
+fatal error: all goroutines are asleep - deadlock!
+```
+
+## Waitgroups
 {{< highlight go >}}
 func main() {
     var wg sync.WaitGroup
@@ -133,7 +151,7 @@ Job 3 Complete!
 
 All Done!
 ```
-## Mutex
+## Mutexes
 {{< highlight go >}}
 type safeNum struct {
     num   int
@@ -165,7 +183,7 @@ func increment(wg *sync.WaitGroup, sf *safeNum) {
 ```
 Result: 100
 ```
-## Semaphore (Bonus)
+## Semaphores (Bonus)
 {{< highlight go >}}
 func main() {
     semaphore := make(chan struct{}, 3)
