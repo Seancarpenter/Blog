@@ -142,7 +142,14 @@ Worker 3: Jobs Done!
 As a precaution, it's very easy to write code that deadlocks when using waitgroups. A simple off by one error is all you'd need to force our previous example to deadlock.
 
 ## Select
+Another handy tool in our toolbox is the select statement. At a glance, a select statement looks a lot like a switch statement, but it's functionality couldn't be more different. Instead of evaluating conditionals, a select statement is a blocking call that listens to multiple channels and executes the code attached to the channel it first recieves a value from. If multiple channels are ready to be pulled from, then one is chosen at random. Notably, select statements only execute once, so we'll need to wrap our select statement in a loop if we want to continuously read from our channels.
+
+The following example demonstrates an extremely common pattern often seen when using the select statemnt. In it, we use two channels, one to pass messages between our main thread and our goroutines, and a second one to signal to our main loop to quit listening for new messages.
+
 {{< highlight go >}}
+import "fmt"
+import "time"
+
 func main() {
     jobs := make(chan int)
     quit := make(chan bool)
@@ -178,7 +185,14 @@ Job 3 Complete!
 All Done!
 ```
 ## Mutexes
+While it may seem strange to mention mutexes near the end of a discussion on concurrency, the powerful functionality that the previously mentioned features provide us often allow us to skip having to manually lock and unlock around operations. However, they are an important part of the language, and often times the right tool for the job, so this post would be significantly lacking if they weren't mentioned at all.
+
+Mutexes perform exactly like you'd expect, allowing you to lock and unlock around code sections to form critical sections. Below is a very simple example that uses locks to guarantee atomic updates to a single integer.
+
 {{< highlight go >}}
+import "fmt"
+import "sync"
+
 type safeNum struct {
     num   int
     mutex sync.Mutex
