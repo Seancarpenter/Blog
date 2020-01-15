@@ -272,7 +272,7 @@ Worker 6 : has entered the critical section.
 
 ## Conclusion
 
-Well that's about it really! Hopefully you found this post useful. If you enjoyed reading this post, you're in luck because new posts will be coming out on the first of each month. February's post will be all about exploring heuristic based algorithms to generate sub-optimal [set cover](https://en.wikipedia.org/wiki/Set_cover_problem) solutions, so be sure to check back on the 1st if that sounds interesting to you.
+Well that's about it really! Hopefully you found this post useful. February's post will be all about exploring heuristic based algorithms used to generate sub-optimal [set cover](https://en.wikipedia.org/wiki/Set_cover_problem) solutions, so be sure to check back on the 1st if that sounds interesting to you.
 
 If you have any suggestions, feedback or stumble across any bugs or typos, feel free to shoot me an email at  seancarpenter10@gmail.com
 
@@ -281,4 +281,4 @@ If you have any suggestions, feedback or stumble across any bugs or typos, feel 
 - Rob Pike - [Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide#1)
 - Rob Pike - [Concurrency Is Not Parallelism](https://vimeo.com/49718712)
 
-If you'd like to run the code exhibited in this post yourself, you can find it [here](https://github.com/Seancarpenter/blog-content/tree/master/2020/concurrency_in_go).
+All code used in the making of this post can be found [here](https://github.com/Seancarpenter/blog-content/tree/master/2020/concurrency_in_go).
