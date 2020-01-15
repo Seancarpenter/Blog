@@ -8,7 +8,7 @@ featured_image = "posts/2020/concurrency_in_go/gopher.png"
 ## Introduction
 Go (or Golang) is a relatively new language developed at Google that's garnered a lot of attention in the last few years for its simplicity, speed, and powerful concurrency features. In a rather short amount of time, a slew of extremely popular and performant applications have been built using Go. To name a few:
 - [Terraform](https://github.com/hashicorp/terraform): A configuration language and engine used to generate and manage cloud infrastructure.
-- [Kubernetes](https://github.com/hashicorp/kubernetes): A distributed server framework used to manage multiple containerized applications (not to mention [Docker](https://en.wikipedia.org/wiki/Docker_%28software%29) as well).
+- [Kubernetes](https://github.com/kubernetes/kubernetes): A distributed server framework used to manage multiple containerized applications (not to mention [Docker](https://en.wikipedia.org/wiki/Docker_%28software%29) as well).
 - [Hugo](https://github.com/gohugoio/hugo): A static site generator that uses a sort of advanced markdown syntax to generate HTML. This website was built using Hugo!
 
 If you already know Go, but want to improve your understanding of how to use its concurrency features, then read on. If you do not know Go, I'd recommend you first start off with the [Tour of Go](https://tour.golang.org/welcome/1), an interactive introduction to the language, as this post will assume you already know the basics. This introduction will also assume you understand the basics of concurrency. If you do not have a good understanding of how concurrency works, I'd first recommend you read the concurrency section in [OSTEP](http://pages.cs.wisc.edu/~remzi/OSTEP/), an awesome free operating systems textbook.
@@ -16,7 +16,7 @@ With that out of the way, lets take a look at the built-in concurrency features 
 
 ## Goroutines
 
-Just as it'd be impossible to talk about concurrency without talking about threads, it would impossible to talk about Go's concurrency model without talking about Goroutines. Goroutines can be thought of as extremely light weight threads. Running a goroutine is as simple as adding the keyword `go` before a function call.
+Just as it'd be impossible to talk about concurrency without talking about threads, it would be impossible to talk about Go's concurrency model without talking about goroutines. Goroutines can be thought of as extremely light weight threads. Running a goroutine is as simple as adding the keyword `go` before a function call.
 
 {{< highlight go >}}
 import "fmt"
@@ -91,7 +91,7 @@ func main() {
 fatal error: all goroutines are asleep - deadlock!
 ```
 
-Lastly, although channels have no maximum size by default, you can specify one by adding passing an additional argument to the make function. The below call to the make function creates a channel that can store a maximum of 10 items.
+Lastly, although channels have no maximum size by default, you can specify one by passing an additional argument to the make function. For example, the following channel can store a maximum of 10 values.
 {{< highlight go >}}
 c := make(chan string, 10)
 {{< /highlight >}}
@@ -99,7 +99,7 @@ c := make(chan string, 10)
 As one might expect, just as trying to retrieve a value from an empty channel will block a goroutine, so will trying to place a value into a full channel. Unsurprisingly, we can (and will!) be able to use this behaviour to our advantage.
 
 ## Waitgroups
-Waitgroups are a handy tool from the sync library that allow us to model situations where we want a goroutine to block until some specified amount of work has been completed. At their core, waitgroups are just thread-safe counters with three important operations:
+Waitgroups are a handy tool from the sync library that allows us to model situations where we want a goroutine to block until some specified amount of work has been completed. At their core, waitgroups are just thread-safe counters with three important operations:
 
 `wg.Add(n)` increments the waitgroup `wg` by n
 `wg.Done()` decrements the waitgroup `wg` by 1
@@ -144,7 +144,7 @@ As a precaution, it's very easy to write code that deadlocks when using waitgrou
 ## Select
 Another handy tool in our toolbox is the select statement. At a glance, a select statement looks a lot like a switch statement, but it's functionality couldn't be more different. Instead of evaluating conditionals, a select statement is a blocking call that listens to multiple channels and executes the code attached to the channel it first recieves a value from. If multiple channels are ready to be pulled from, then one is chosen at random. Notably, select statements only execute once, so we'll need to wrap our select statement in a loop if we want to continuously read from our channels.
 
-The following example demonstrates an extremely common pattern often seen when using the select statemnt. In it, we use two channels, one to pass messages between our main thread and our goroutines, and a second one to signal to our main loop to quit listening for new messages.
+The following example demonstrates an extremely common pattern often seen when using the select statement. In it we use two channels, one to pass messages between our main thread and our goroutines, and a second to signal to our main loop to quit listening for new messages.
 
 {{< highlight go >}}
 import "fmt"
@@ -185,9 +185,9 @@ Job 3 Complete!
 All Done!
 ```
 ## Mutexes
-While it may seem strange to mention mutexes near the end of a discussion on concurrency, the powerful functionality that the previously mentioned features provide us often allow us to skip having to manually lock and unlock around operations. However, they are an important part of the language, and often times the right tool for the job, so this post would be significantly lacking if they weren't mentioned at all.
+While it may seem strange to mention mutexes near the end of a discussion on concurrency, the powerful functionality that the previously mentioned features provide us often allow us to avoid using mutexes altogether.  However, they are an important part of the language, and often times the right tool for the job, so this post would be significantly lacking if they weren't mentioned at all.
 
-Mutexes perform exactly like you'd expect, allowing you to lock and unlock around code sections to form critical sections. Below is a very simple example that uses locks to guarantee atomic updates to a single integer.
+Mutexes perform exactly like you'd expect, allowing you to lock and unlock around code sections to form critical sections. Below is a very simple example that uses mutexes to guarantee atomic updates to a single integer.
 
 {{< highlight go >}}
 import "fmt"
@@ -224,6 +224,8 @@ func increment(wg *sync.WaitGroup, sf *safeNum) {
 Result: 100
 ```
 ## Semaphores (Bonus)
+Although semaphores don't have their own implementation in Go, it's very easy to roll your own using buffered channels. In fact, functionally, a buffered channel **is** a semaphore, except with the added benefit that we can also use it to pass values around. If we don't care about passing values around using our "semaphore", we can pass in an empty struct `struct{}` to avoid having to allocate any memory to what are essentially dummy values.
+
 {{< highlight go >}}
 func main() {
     semaphore := make(chan struct{}, 3)
@@ -268,9 +270,15 @@ Worker 3 : has left the critical section.
 Worker 6 : has entered the critical section.
 ```
 
+## Conclusion
+
+Well that's about it really! Hopefully you found this post useful. If you enjoyed reading this post, you're in luck because new posts will be coming out on the first of each month. February's post will be all about exploring heuristic based algorithms to generate sub-optimal [set cover](https://en.wikipedia.org/wiki/Set_cover_problem) solutions, so be sure to check beck on the 1st if that sounds interesting to you.
+
+If you have any suggestions, feedback or stumble across any bugs or typos, feel free to shoot me an email at  seancarpenter10@gmail.com
+
 ## Additional Resources
 
 - Rob Pike - [Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide#1)
 - Rob Pike - [Concurrency Is Not Parallelism](https://vimeo.com/49718712)
 
-If you'd like to run the code exhibited in this post yourself, you can find it all [here](https://github.com/Seancarpenter/blog-content/tree/master/2020/concurrency_in_go).
+If you'd like to run the code exhibited in this post yourself, you can find it [here](https://github.com/Seancarpenter/blog-content/tree/master/2020/concurrency_in_go).
