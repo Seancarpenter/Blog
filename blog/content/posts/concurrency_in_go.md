@@ -11,7 +11,7 @@ Go (or Golang) is a relatively new language developed at Google that's garnered 
 - [Kubernetes](https://github.com/kubernetes/kubernetes): A distributed server framework used to manage multiple containerized applications (not to mention [Docker](https://en.wikipedia.org/wiki/Docker_%28software%29) as well).
 - [Hugo](https://github.com/gohugoio/hugo): A static site generator that uses an advanced markdown syntax to generate HTML. This website was built using Hugo!
 
-If you already know Go, but want to improve your understanding of how to use its concurrency features, then read on. If you do not know Go, I'd recommend you first start off with the [Tour of Go](https://tour.golang.org/welcome/1), an interactive introduction to the language, as this post will assume you already know the basics. This introduction will also assume you understand the basics of concurrency. If you do not have a good understanding of how concurrency works, I'd first recommend you read the concurrency section in [OSTEP](http://pages.cs.wisc.edu/~remzi/OSTEP/), an awesome free operating systems textbook.
+This post will cover all the basic concurrency features you need to know to start writing concurrent applications in Go. If you do not know Go, I'd recommend you first start off with the [Tour of Go](https://tour.golang.org/welcome/1), an interactive introduction to the language, as this post will assume you already know the basics. This introduction will also assume you understand the basics of concurrency. If you do not have a good understanding of how concurrency works, I'd first recommend you read the concurrency section in [OSTEP](http://pages.cs.wisc.edu/~remzi/OSTEP/), an awesome free operating systems textbook.
 With that out of the way, lets take a look at the built-in concurrency features that make Go an exceptional language.
 
 ## Goroutines
@@ -169,7 +169,7 @@ func main() {
 }
 
 func createJobs(jobs chan int, quit chan bool) {
-    for i := 1; i <= 10; i++ {
+    for i := 1; i <= 3; i++ {
         time.Sleep(300 * time.Millisecond)
         jobs <- i
     }
@@ -204,7 +204,7 @@ func main() {
     sf := safeNum{}
     sf.num = 0
 
-    for i := 0; i < 1000; i++ {
+    for i := 0; i < 100; i++ {
         wg.Add(1)
         go increment(&wg, &sf)
     }
