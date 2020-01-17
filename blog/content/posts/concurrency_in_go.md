@@ -1,5 +1,5 @@
 +++
-title = "Concurrency In Go"
+title = "An Introduction To Concurrency In Go"
 description = "A brief and pragmatic introduction to concurrency in Go."
 type = "post"
 date = "2020-01-14"
