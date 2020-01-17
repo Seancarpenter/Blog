@@ -43,7 +43,7 @@ itemsPerCategory = 5 # maximum number of posts shown in the sidebar.
 
 # footer
 showPoweredBy = true # show footer text: Powered by Hugo and Zzo theme
-showFeedLinks = true # RSS Feed
+# showFeedLinks = true # RSS Feed
 showSocialLinks = true # email, facebook, twitter ...
 # enableLangChange = true # show button at bottom left of footer.
 themeOptions = ["dark", "light", "hacker", "solarized", "custom"] # select options for site color theme
