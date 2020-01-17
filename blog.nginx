@@ -40,3 +40,21 @@ server {
         server_name opinionator.io www.opinionator.io;
         return 301 https://www.seancarpenter.io;
 }
+
+server {
+    if ($host = www.seancarpenter.io) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = seancarpenter.io) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+
+        server_name seancarpenter.io www.seancarpenter.io;
+    return 404; # managed by Certbot
+}
