@@ -1,6 +1,6 @@
 +++
 title = "About"
-description = "A brief description of this blog."
+description = "A brief description of Opinionator."
 type = "about"
 date = "2020-01-01"
 +++
