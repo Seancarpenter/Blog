@@ -5,7 +5,9 @@ type = "post"
 date = "2020-01-14"
 featured_image = "posts/2020/concurrency_in_go/gopher.png"
 +++
+<!-- ![Example image](/images/posts/2020/concurrency_in_go/gopher.png) -->
 ## Introduction
+
 Go (or Golang) is a relatively new language developed at Google that's garnered a lot of attention in the last few years for its simplicity, speed, and powerful concurrency features. In a rather short amount of time, a slew of extremely popular and performant applications have been built using Go. To name a few:
 - [Terraform](https://github.com/hashicorp/terraform): A configuration language and engine used to generate and manage cloud infrastructure.
 - [Kubernetes](https://github.com/kubernetes/kubernetes): A distributed server framework used to manage multiple containerized applications (not to mention [Docker](https://en.wikipedia.org/wiki/Docker_%28software%29) as well).
