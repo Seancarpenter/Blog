@@ -9,4 +9,3 @@ cd ~/blog/blog
 hugo
 cp -r ~/Blog/blog/ /var/www/seancarpenter.io/html/
 cd ~
-
