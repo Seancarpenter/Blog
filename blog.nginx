@@ -13,15 +13,13 @@
 server {
 
     root /var/www/seancarpenter.io/html/blog/public;
-
     index index.html;
-
     server_name seancarpenter.io www.seancarpenter.io;
 
     location / {
-            # First attempt to serve request as file, then
-            # as directory, then fall back to displaying a 404.
-            try_files $uri $uri/ =404;
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
     }
 
     access_log /var/log/nginx/access_log combined;
@@ -50,16 +48,14 @@ server {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-
     if ($host = seancarpenter.io) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
+    listen 80;
+    listen [::]:80;
 
-        listen 80;
-        listen [::]:80;
-
-        server_name seancarpenter.io www.seancarpenter.io;
+    server_name seancarpenter.io www.seancarpenter.io;
     return 404; # managed by Certbot
 }
 
@@ -68,13 +64,11 @@ server {
         return 301 https://www.seancarpenter.io$request_uri;
     } # managed by Certbot
 
-
     if ($host = opinionator.io) {
         return 301 https://seancarpenter.io$request_uri;
     } # managed by Certbot
 
-
-        listen 80;
-        server_name opinionator.io www.opinionator.io;
+    listen 80;
+    server_name opinionator.io www.opinionator.io;
     return 404; # managed by Certbot
 }
