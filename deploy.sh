@@ -7,5 +7,5 @@ fi
 git clone https://github.com/Seancarpenter/blog
 cd ~/blog/blog
 hugo
-cp -r ~/blog/blog/ /var/www/seancarpenter.io/html/
+cp -r ~/blog/blog/ /var/www/opinionator.io/html/
 cd ~
