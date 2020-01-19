@@ -1,17 +1,18 @@
 {
   "manifest_version": 2,
-  "name": "My Extension",
-  "version": "versionString",
+  "short_name": "Opinionator",
+  "name": "Opinionator",
   "default_locale": "en",
-  "description": "A plain text description",
+  "display": "standalone,"
+  "description": "A blog about various computer science and software engineering topics",
   "icons": [
     {
       "src": "favicon.png",
       "sizes": "16x16",
       "type": "image/png"
     }, {
-      "src": "logo.png",
-      "sizes": "48x48",
+      "src": "logo-64.png",
+      "sizes": "64x64",
       "type": "image/png"
     }, {
       "src": "logo-192.png",
