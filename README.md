@@ -67,6 +67,10 @@ Resources
 
     sudo service nginx restart
 
+    # If you run into issues when trying to setup the nginx configuration, run the following to get an
+    # error output.
+    nginx -t
+
 ### Setting up SSL through Certbot and Letsencrypt
 
     # First you'll need to run these instructions to download certbot.
