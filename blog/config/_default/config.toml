@@ -12,10 +12,6 @@ enableRobotsTXT = true
 timeout = 10000
 enableEmoji = true
 paginate = 10 # Number of items per page in paginated lists.
-rssLimit = 100
-
-enableGitInfo = false # When true, the modified date will appear on a summary and single page. Since GitHub info needs to be fetched, this feature will slow down to build depending on a page number you have
-googleAnalytics = ""
 
 [markup]
   [markup.goldmark]
@@ -30,4 +26,4 @@ googleAnalytics = ""
     noClasses = false
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML","JSON"]

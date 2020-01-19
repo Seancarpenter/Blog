@@ -1,7 +1,7 @@
 +++
 title = "An Introduction To Concurrency In Go"
+author = "Sean Carpenter"
 description = "A brief and pragmatic introduction to concurrency in Go."
-type = "post"
 date = "2020-01-14"
 featured_image = "posts/2020/concurrency_in_go/gopher.png"
 +++
