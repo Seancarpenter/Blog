@@ -12,14 +12,12 @@
   <div class="archive__container">
     {{ $pages := (where .Site.RegularPages "Section" "=" "posts") }}
     {{ $paginator := .Paginate ($pages.GroupByDate (.Site.Params.archiveGroupByDate | default "2006")) .Site.Params.archivePaginate }}
-
     {{ range ($paginator).PageGroups }}
     <span class="archive__key">{{ .Key }}</span>
     <ul class="archive__ul">
       {{ range .Pages }}
       <li class="archive__li">
         <span class="archive__meta">
-          <!-- <span class="archive__type">{{ .Type }}</span> -->
           <span class="archive__date">{{ .Date.Format (i18n "archive-dateformat") }}</span>
         </span>
         <a href="{{ .Permalink }}" class="archive__title">{{ .Title }}</a>
