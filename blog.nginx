@@ -30,7 +30,6 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/opinionator.io/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
 }
 server {
     server_name seancarpenter.io www.seancarpenter.io;
@@ -53,8 +52,6 @@ server {
     } # managed by Certbot
 
     listen 80;
-    listen [::]:80;
-
     server_name seancarpenter.io www.seancarpenter.io;
     return 404; # managed by Certbot
 }
@@ -69,6 +66,7 @@ server {
     } # managed by Certbot
 
     listen 80;
+    listen [::]:80;
     server_name opinionator.io www.opinionator.io;
     return 404; # managed by Certbot
 }
