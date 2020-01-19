@@ -6,9 +6,3 @@
 <script defer src="{{ $lazysizes.RelPermalink }}"></script>
 {{ $zzo := resources.Get "js/zzo.js" | resources.Minify | resources.Fingerprint }}
 <script defer src="{{ $zzo.RelPermalink }}"></script>
-
-<script>
-  window.onload = function() {
-    runSearch();
-  }
-</script>

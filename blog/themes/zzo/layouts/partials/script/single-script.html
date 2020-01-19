@@ -16,15 +16,11 @@
   <script defer src="{{ $js.katex_auto_render.url }}" integrity="{{ $js.katex_auto_render.sri }}" crossorigin="anonymous"></script>
 {{ end }}
 
-{{ if in .Params.Libraries "mathjax" }}
-  <script defer src="{{ $js.mathjax.url }}" integrity="{{ $js.mathjax.sri }}" crossorigin="anonymous"></script>
-{{ end }}
-
 {{ if in .Params.Libraries "chart" }}
   <script defer src="{{ $js.chart.url }}" integrity="{{ $js.chart.sri }}" crossorigin="anonymous"></script>
 {{ end }}
-
 <script>
+
   window.onload = function() {
     (function () {
       document.querySelectorAll('.single__contents > pre > code')
@@ -34,55 +30,9 @@
           }
         });
     })();
-
+    {{ $lib := .Params.libraries }}
+    var lib = JSON.parse({{ $lib | jsonify }});
     var navbar = $('.navbar');
-
-    // toc
-    {{ $enableToc := ($.Param "enableToc") }}
-    {{ $toc := ($.Param "toc") }}
-    {{ $hideToc := ($.Param "hideToc") }}
-    var enableToc = JSON.parse({{ $enableToc | jsonify }});
-    var toc = JSON.parse({{ $toc | jsonify }});
-    var hideToc = JSON.parse({{ $hideToc | jsonify }});
-
-    if (enableToc || toc) {
-      $('#TableOfContents > ul > li').each(function () {
-        $(this).find('ul').css('display', 'none');
-      });
-      $('#TableOfContents a').each(function () {
-        $(this).click(function () {
-          navbar.removeClass('navbar--show');
-          navbar.removeClass('navbar--hide');
-          navbar.addClass('navbar--hide');
-
-          $(".single__contents :header").each(function () {
-            $('.toc a').removeClass('active');
-          });
-          $(this).addClass('active');
-
-          $('#TableOfContents > ul > li').each(function () {
-            $(this).find('ul').css('display', 'none');
-          });
-          $(this).next().css('display', 'block');
-          $(this).parents('ul').css('display', 'block');
-        });
-      });
-
-      // toc visibility
-      $("#toggle-toc").change(function () {
-        if (this.checked) {
-          $('.toc').fadeIn(200);
-          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
-          $('side').removeClass('main-side');
-          $('.toc__flexbox').attr('data-position', 'fixed');
-        } else {
-          $('.toc').fadeOut(200);
-          $('main').removeClass('main-main').removeClass('main').addClass('main');
-          $('side').removeClass('main-side');
-          $('.toc__flexbox').attr('data-position', 'absolute');
-        }
-      });
-    }
 
     // katex
     if (lib && lib.includes('katex')) {
@@ -94,21 +44,6 @@
       ];
 
       renderMathInElement(document.querySelector('.single__contents'), options);
-    }
-
-    // mathjax
-    if (lib && lib.includes('mathjax')) {
-      window.MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          displayMath: [['$$', '$$'], ['\\[', '\\]']],
-          processEscapes: false,
-          packages: { '[+]': ['noerrors'] }
-        },
-        loader: {
-          load: ['[tex]/noerrors']
-        },
-      };
     }
 
     // chart.js
