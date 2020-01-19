@@ -15,12 +15,6 @@
     {{ partial "body/whoami" . }}
   </div>
 </main>
-
-{{ if $.Param "enableSidebar" }}
-<aside class="{{ if or ($.Param "enableToc") ($.Param "toc") }}main-side{{ end }}">
-  {{ partial "sidebar/sidebar-single" . }}
-</aside>
-{{ end }}
 <script>
   enquire.register("screen and (max-width: 769px)", {
     match: function () {
