@@ -32,12 +32,6 @@
       }
     },
     unmatch: function () {
-      if (document.getElementsByTagName('main')[0]) {
-        document.getElementsByTagName('main')[0].className = "main-main";
-      }
-      if (document.getElementsByTagName('aside')[0]) {
-        document.getElementsByTagName('aside')[0].className = "main-side";
-      }
       document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
       document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
       document.getElementsByClassName('mobile-search')[0].classList.add('hide');
