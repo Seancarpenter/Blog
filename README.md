@@ -28,49 +28,47 @@ Resources
     # Clone the repo into your home directory.
 
     cd ~
-    git clone https://github.com/Seancarpenter/Blog
+    git clone https://github.com/Seancarpenter/blog
 
-    # Generate the actual static site inside of the blog repo.
+    # Copy the deploy scripts to the /bin directory and make them executable.
 
-    cd Blog/blog
-    hugo
+    cp blog/deploy.sh /bin/deploy
+    chmod +x /bin/deploy
 
-    # Copy the site to your /var/www directory.
+    cp blog/deploy_nginx.sh /bin/deploy_nginx
+    chmod +x /bin/deploy_nginx
 
-    sudo mkdir -p /var/www/seancarpenter.io/html
-    cp Blog/blog /var/www/seancarpenter.io/html/blog
+    # Create the folder path that will ultimately store the static pages.
+
+    sudo mkdir -p /var/www/opinionator.io/html
 
     # Assign the correct access rights to the folder.
 
-    sudo chown -R $USER:$USER /var/www/seancarpenter.io/html
-    sudo chmod -R 755 /var/www/seancarpenter.io
+    sudo chown -R $USER:$USER /var/www/opinionator.io/html
+    sudo chmod -R 755 /var/www/opinionator.io
 
-    # Create the nginx configuration file for the website.
+    # Copy the nginx configuration file for the website.
 
-    cd /etc/nginx/sites-available/
-    cp default blog
-    vim blog
-
-    # Edit your nginx server configuration to match the contents in blog.nginx
-
-    # To enable this site, we need to create a symlink the site into sites-enabled. Use absolute filepaths to avoid symlink confusion.
-
-    sudo rm /etc/nginx/sites-enabled/default
-    sudo ln -s /etc/nginx/sites-available/blog /etc/nginx/sites-enabled/blog
+    cp ~/blog/blog.nginx /etc/nginx/sites-enabled/blog
+    cp ~/blog/blog.nginx /etc/nginx/sites-available/blog
 
     # At this point, we can run and enable NGINX with the following commands:
 
     sudo systemctl start nginx
     sudo systemctl enable nginx
 
-    # If you make any changes to the NGINX configuration file, you will need to refresh NGINX after doing so by running:
+    # If you make any changes to the NGINX configuration file, just run:
 
-    sudo service nginx restart
+    deploy_nginx
 
     # If you run into issues when trying to setup the nginx configuration, run the following to get an
     # error output.
+
     nginx -t
 
+    # To deploy changes to the actual website, run:
+
+    deploy
 ### Setting up SSL through Certbot and Letsencrypt
 
     # First you'll need to run these instructions to download certbot.
@@ -89,6 +87,3 @@ Resources
 
     sudo certbot --nginx
 
-### Deploy Changes
-
-To deploy changes, just run `update.sh` while sshed into the repo as a user with sudo privileges. Important to note, you'll need to move the update.sh script outside of the repository first.
