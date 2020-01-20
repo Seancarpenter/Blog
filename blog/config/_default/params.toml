@@ -20,6 +20,8 @@ location = "Washington D.C."
 organization = "Opinionator"
 link = "https://github.com/seancarpenter"
 
+#navbar
+# logo = false
 # sidebar
 enableBio = true # home page sidebar
 enableSidebar = true # Set to false to create the full width of the content.
