@@ -69,6 +69,7 @@ Resources
     # To deploy changes to the actual website, run:
 
     deploy
+
 ### Setting up SSL through Certbot and Letsencrypt
 
     # First you'll need to run these instructions to download certbot.
