@@ -47,7 +47,6 @@ $content-font: {{ .Site.Data.font.content_font }};
 
 @import 'components/bio';
 @import 'components/expand';
-@import 'components/gtt';
 @import 'components/hr';
 @import 'components/math';
 @import 'components/pagination';
