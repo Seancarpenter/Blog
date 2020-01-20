@@ -3,22 +3,9 @@
     <hr />
 
     <div class="footer__poweredby">
-        {{ if $.Site.Copyright }}
-            <p class="caption">
-                {{ if $.Site.Params.copyrightOptions.enableCopyrightLink }}
-                    {{ $leftString := replace (index (split $.Site.Copyright "{}") 0) "{year}" now.Year }}
-                    {{ $rightString := replace (index (split $.Site.Copyright "{}") 1) "{year}" now.Year }}
-
-                    {{ if and ($.Site.Params.copyrightOptions.copyrightLinkImage) ($.Site.Params.copyrightOptions.copyrightLinkText) }}
-                        <a rel="license" href="{{ $.Site.Params.copyrightOptions.copyrightLink }}" class="footer__copyright--img"><img alt="{{ $.Site.Params.copyrightOptions.copyrightLinkText }}" style="border-width:0" src="{{ $.Site.Params.copyrightOptions.copyrightLinkImage }}"/></a>{{ $leftString }}<a rel="license" href="{{ $.Site.Params.copyrightOptions.copyrightLink }}">{{ $.Site.Params.copyrightOptions.copyrightLinkText }}</a>{{ $rightString }}
-                    {{ else }}
-                        {{ $leftString }}<a rel="license" href="{{ $.Site.Params.copyrightOptions.copyrightLink }}">{{ $.Site.Params.copyrightOptions.copyrightLinkText }}</a>{{ $rightString }}
-                    {{ end }}
-                {{ else }}
-                    {{ with $.Site.Copyright }}{{ replace . "{year}" now.Year | markdownify}}{{ end }}
-                {{ end }}
-            </p>
-        {{ end }}
+        <p class="caption">
+            All content on Opinionator is licensed under the <a href="https://mit-license.org/"> MIT License.</a>
+        </p>
 
         {{ if $.Param "showPoweredBy" }}
             <p class="caption">Built using <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>

@@ -52,9 +52,3 @@ themeOptions = ["dark", "light", "hacker", "solarized", "custom"] # select optio
   enable = false # if set, the donation button will show up on the single page.
   paypal = "" # Paypal URL
   patreon = "" # Patreon URL
-
-[copyrightOptions]
-  enableCopyrightLink = false # if set, you can add copyright link
-  copyrightLink = ""
-  copyrightLinkImage = ""
-  copyrightLinkText = ""
