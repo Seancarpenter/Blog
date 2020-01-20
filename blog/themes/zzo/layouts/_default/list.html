@@ -23,12 +23,6 @@
 
     {{ partial "pagination/pagination" . }}
 </main>
-
-{{ if $.Param "enableSidebar" }}
-    <aside class="main-side">
-        {{ partial "sidebar/sidebar-list" . }}
-    </aside>
-{{ end }}
 <script>
     enquire.register("screen and (max-width: 769px)", {
         match: function () {
