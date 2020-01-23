@@ -9,6 +9,7 @@
     font-weight: 900;
     font-family: $title-font;
     line-height: 3rem;
+    padding-bottom: 5px;
     overflow-wrap: break-word;
 
     @include themify($themes) {
@@ -20,9 +21,10 @@
     font-size: 1.3rem;
     font-weight: 900;
     font-family: $title-font;
-    line-height: 3rem;
+    line-height: 2rem;
     overflow-wrap: break-word;
     padding-left: 6px;
+    padding-bottom: 3px;
 
     @include themify($themes) {
       color: themed("single-header-description-color");
