@@ -1,8 +1,8 @@
 +++
 author = "Sean Carpenter"
-title = "Welcome!"
+title = "Welcome To Opinionator!"
 date = 2020-01-01
-description = "Welcome to Opinionator, a blog about various computer science and software engineering topics."
+description = "A blog about various computer science and software engineering topics."
 featured_image = "posts/2020/welcome/opinionator.png"
 +++
 
