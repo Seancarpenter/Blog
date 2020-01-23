@@ -1,8 +1,8 @@
 +++
 title = "Set Cover and Aliens"
 author = "Sean Carpenter"
-date = "2020-02-16"
-description = "A close look at the classic set cover problem through a post-apocalyptic lens."
+date = "2020-01-16"
+description = "A close look at the classic set cover problem through a post-apocalyptic lens"
 featured_image = "posts/2020/concurrency_in_go/gopher.png"
 +++
 
