@@ -1,8 +1,8 @@
 +++
-title = "An Introduction To Concurrency In Go"
+title = "Concurrency In Go"
 author = "Sean Carpenter"
 date = "2020-01-14"
-description = "A brief and pragmatic introduction to concurrency in Go."
+description = "A brief and pragmatic introduction"
 featured_image = "posts/2020/concurrency_in_go/gopher.png"
 +++
 <!-- ![Example image](/images/posts/2020/concurrency_in_go/gopher.png) -->

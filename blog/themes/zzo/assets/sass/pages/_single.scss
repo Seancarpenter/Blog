@@ -5,7 +5,7 @@
   overflow-wrap: break-word;
 
   &__title {
-    font-size: 2.5rem;
+    font-size: 2.6rem;
     font-weight: 900;
     font-family: $title-font;
     line-height: 3rem;
@@ -16,9 +16,21 @@
     }
   }
 
+  &__description {
+    font-size: 1.3rem;
+    font-weight: 900;
+    font-family: $title-font;
+    line-height: 3rem;
+    overflow-wrap: break-word;
+    padding-left: 6px;
+
+    @include themify($themes) {
+      color: themed("single-header-description-color");
+    }
+  }
   &__meta {
     font-size: 0.8rem;
-
+    padding-left: 6px;
     @include flexbox();
     @include align-items(center);
     @include flex-wrap(wrap);

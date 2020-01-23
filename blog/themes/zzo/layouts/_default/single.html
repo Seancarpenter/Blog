@@ -6,6 +6,7 @@
 <main class="{{ if or ($.Param "enableToc") ($.Param "toc") }}{{ if $.Param "hideToc" }}main{{ else }}main-main{{ end }}{{ else }}main{{ end }}">
   <div class="single">
     <h2 class="single__title">{{ .Title }}</h2>
+    <h3 class="single__description">{{ .Description }}</h3>
     <div class="single__meta">
       {{ partial "body/infos" . }}
     </div>
