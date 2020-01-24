@@ -31,7 +31,7 @@ Additionally, your current circumstances indicate that you only need one of each
 To start off with, we can think of our items and locations as a set of subsets `S = {S0, S1, S2...}`, and the union of all subsets in `S` as the universal set `U`. In mathematical notation:
 
 `U = union(n, i=1, Si)`
-where `n` is the number of elements in `S`.
+where `n` is the number of subsets in `S`.
 
 **e.g.** The universal set `U` of the set `S`, where `S = {{1, 2}, {4, 5}, {2, 3}}` equals `{1, 2, 3, 4, 5}`.
 
@@ -45,7 +45,7 @@ Lastly, let's use `O` to denote the optimal (or minimal) set cover solution to a
 
 ## Devising A Solution
 
-With these tools at our disposal, we can finally begin to approach this problem. To start, it should be clear that if the power set `p(S)` or `P`, contains all possible combinations of subsets in `S`, and our optimal solution `O` is a combination of subsets in `S`, then `O ∈ P`. Therefore, every possible set cover of `S` (be it optimal or sub-optimal) can be found within `P` as well. As a result, finding `O` is as simple as iterating through all of the sets in `P` to find the set with the least amount of subsets `S`, where the union of all of the subsets in `S` is equal to the universe `U`.
+With these tools at our disposal, we can finally begin to approach this problem. To start, it should be clear that if the power set `p(S)` or `P`, contains all possible combinations of subsets in `S`, and our optimal solution `O` is a combination of subsets in `S`, then `O ∈ P`. Therefore, every possible set cover of `S` (be it optimal or suboptimal) can be found within `P` as well. As a result, finding `O` is as simple as iterating through all of the sets in `P` to find the set with the least amount of subsets `S`, where the union of all of the subsets in `S` is equal to the universe `U`.
 
     def optimal_set_cover(S)
         P = power_set(S)
@@ -54,13 +54,67 @@ With these tools at our disposal, we can finally begin to approach this problem.
         for each set PSi ∈ P
             KU = The union of all sets in PSi
             if KU = U
-                if size(PSi) < size(O)
+                if cardinality(PSi) < cardinality(O)
                     O = PSi
         return O
 
-With an algorithm at our disposal
+Alright! With some psuedocode to guide our path, let's see if we can actually implement a solution in Python.
 
-## Implementing The Solution In Python
+## Implementation
+
+For starters we're going to need to write a function to generate power sets. This here is a clever solution written by ________
+
+{{< highlight python >}}
+def power_set(s):
+    cardinality = len(s)
+    ps = []
+    for a in range(1 << cardinality):
+        ps.append([s[b] for b in range(cardinality) if (a & (1 <<  b))])
+    return ps
+{{< /highlight >}}
+
+We're also going to need a function to generate the universe of a set of subsets.
+
+{{< highlight python >}}
+def generate_universe(sos):
+    result = set()
+    for s in sos:
+        result = result.union(s)
+    return result
+{{< /highlight >}}
+
+With these two pieces, we have all we need to finally implement our optimal set cover algorithm
+
+{{< highlight python >}}
+def set_cover(sos):
+    universe = generate_universe(sos)
+    power_sos = power_set(sos)
+    min_sos = sos
+    for s in power_sos:
+        current_universe = generate_universe(s)
+        if current_universe == universe and len(s) < len(min_sos):
+            min_sos = s
+    return min_sos
+{{< /highlight >}}
 
 
+Oh no! This solution is super slow and a good solution doesn't exist! What to we do?
 
+## Suboptimal Solutions
+{{< highlight python >}}
+def greedy_set_cover(sos):
+    universe = generate_universe(sos)
+    sorted_sos = sorted(sos, key=lambda x: len(x.intersection(universe)))
+    min_sos = []
+    known_universe = set()
+    while sorted_sos:
+        s = sorted_sos.pop()
+        if known_universe.union(s) != known_universe:
+            known_universe = known_universe.union(s)
+            min_sos.append(s)
+        if universe == known_universe:
+            break
+        # Put the set with the largest number of elements not yet in Universe at the top.
+        sorted_sos = sorted(sorted_sos, key=lambda x: len(x.intersection(universe)))[::-1]
+    return min_sos
+{{< /highlight >}}
