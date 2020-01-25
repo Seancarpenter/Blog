@@ -3,9 +3,9 @@ title = "Set Cover and Aliens"
 author = "Sean Carpenter"
 date = "2020-01-16"
 description = "A close look at the classic set cover problem through a post-apocalyptic lens"
-featured_image = "posts/2020/concurrency_in_go/gopher.png"
+featured_image = "posts/2020/set_cover_and_aliens/alien_abduction.png"
 +++
-## The Scenario
+![Warning Aliens](/images/posts/2020/set_cover_and_aliens/sign.png)
 The year is 3000. Aliens have invaded and enslaved nearly the entire human race. You however have somehow managed to stay safe and out of sight from your would-be alien overlords, and are safely hidden in a small house in a rural part of the country. However, supplies are beginning to wear thin, and before long you know you're going to need to retrieve 4 different items from the various abandoned buildings around you. You'll need:
 
 a Car Battery
