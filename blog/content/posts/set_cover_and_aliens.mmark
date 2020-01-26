@@ -1,0 +1,127 @@
++++
+title = "Set Cover and Aliens"
+author = "Sean Carpenter"
+date = "2020-01-16"
+description = "A close look at the classic set cover search problem through a post-apocalyptic lens"
+featured_image = "posts/2020/set_cover_and_aliens/alien_abduction.png"
+libraries = ["katex"]
++++
+
+
+## The Scenario
+![Warning Aliens](/images/posts/2020/set_cover_and_aliens/sign.png)
+
+The year is 3000. Aliens have invaded and enslaved nearly the entire human race. You however have somehow managed to stay safe and out of sight from your would-be alien overlords, and are safely hidden in a small house in a rural part of the country. However, supplies are beginning to wear thin, and before long you know you're going to need to retrieve these 4 different items from the abandoned buildings around you if you want to survive.
+
+![All Items](/images/posts/2020/set_cover_and_aliens/all_items.png)
+
+You've been hiding out here for a long time, and as such are rather familiar with the area. You know exactly where to find these items, but traveling to the different buildings for supplies is going to be risky. While you are out in the open, you're at risk of being abducted by a roving UFO's tractor beam, vaporized, or worse! Analyzing a map of the area indicates that there are 4 buildings within equal distance of each other that combined have all of the resources you need.
+
+![The Scenario](/images/posts/2020/set_cover_and_aliens/scenario.png)
+
+Additionally, your current circumstances indicate that you only need one of each item. Retrieving more than one copy of each item is simply not going to increase your chances of survival. With that in mind, which of these buildings should you visit to get **ALL** the items you need in the **MINIMUM** amount of trips? At a glance, it should be easy to tell that we should visit **Location 1** and **Location 4** to get the supplies we need, and that the minimum number of trips that we'll need to make to get all of our supplies is **2**. However, what if we wanted to devise an algorithm to find 100 items from 20 different locations? Well we'd need to come up with an algorithm of course! As we'll soon find out, hidden within this relatively silly scenario is a deceptively hard problem known as the [Set Cover Search Problem](https://en.wikipedia.org/wiki/Set_cover_problem). Before we try and come up with an algorithm however, let's take a step back and see if we can turn this problem into something a bit more generic.
+
+
+## Abstracting The Problem
+
+To start off with, we can think of our items and locations as a set of subsets $$S = \{S_0, S_1, S_2\ ...\}$$, and the union of all subsets in $$S$$ as the universal set $$U$$. In mathematical notation:
+
+$$
+U = \bigcup\limits^n _{i=0} S_i
+$$
+
+<p style="text-align:center"> where $$n$$ is the number of subsets in $$S$$.
+
+$$e.g.$$
+
+<p style="text-align:center">The universal set $$U$$ of $$\{\{1, 2\},\ \{4, 5\},\ \{2, 3\}\} = \{1, 2, 3, 4, 5\}$$
+
+Next, we're going to use the variable $$P$$ to denote the [power set](https://en.wikipedia.org/wiki/Power_set) of $$S$$, or $$p(S)$$. The power set is defined as the set of all subsets of a given set, including the empty set $$\emptyset$$ and $$S$$ itself.
+
+$$e.g.$$
+
+$$
+p(\{1, 2\}) = \{\{\emptyset\},\ \{1\},\ \{2\},\ \{1, 2\}\}
+$$
+
+Lastly, let's use $$O$$ to denote the **optimal** (or minimal) set cover solution to any given set of subsets $$S$$. This in constrast to a **suboptimal** set cover solution, which is a set cover solution that is **NOT** minimal.
+
+$$e.g.$$
+
+<p style="text-align:center">The optimal set cover solution $$O$$ of $$S$$ where $$S = \{\{1, 2\}, \{3, 4\}, \{2, 3\}\}$$ is $$\{\{1, 2\}, \{3, 4\}\}$$
+
+## Devising A Solution
+
+With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ (or $$P$$), contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in P$$. Therefore, every possible set cover of $$S$$ (be it optimal or suboptimal) can be found within $$P$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$P$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
+
+
+    def optimal_set_cover(S)
+        P = power_set(S)
+        U = universe(S)
+        O = S
+        for each set PSi in P
+            KU = universe(PSi)
+            if KU == U and len(PSi) < len(O)
+                O = PSi
+        return O
+
+Alright! With some psuedocode to guide our path, let's see try and implement a working solution in Python.
+
+## Implementation
+
+For starters we're going to need to write a function to generate power sets. This here is a clever solution written by ________
+
+{{< highlight python >}}
+def power_set(s):
+    cardinality = len(s)
+    ps = []
+    for a in range(1 << cardinality):
+        ps.append([s[b] for b in range(cardinality) if (a & (1 <<  b))])
+    return ps
+{{< /highlight >}}
+
+We're also going to need a function to generate the universe of a set of subsets.
+
+{{< highlight python >}}
+def generate_universe(sos):
+    result = set()
+    for s in sos:
+        result = result.union(s)
+    return result
+{{< /highlight >}}
+
+With these two pieces, we have all we need to finally implement our optimal set cover algorithm
+
+{{< highlight python >}}
+def set_cover(sos):
+    universe = generate_universe(sos)
+    power_sos = power_set(sos)
+    min_sos = sos
+    for s in power_sos:
+        current_universe = generate_universe(s)
+        if current_universe == universe and len(s) < len(min_sos):
+            min_sos = s
+    return min_sos
+{{< /highlight >}}
+
+
+Oh no! This solution is super slow and a good solution doesn't exist! What to we do?
+
+## Suboptimal Solutions
+{{< highlight python >}}
+def greedy_set_cover(sos):
+    universe = generate_universe(sos)
+    sorted_sos = sorted(sos, key=lambda x: len(x.intersection(universe)))
+    min_sos = []
+    known_universe = set()
+    while sorted_sos:
+        s = sorted_sos.pop()
+        if known_universe.union(s) != known_universe:
+            known_universe = known_universe.union(s)
+            min_sos.append(s)
+        if universe == known_universe:
+            break
+        # Put the set with the largest number of elements not yet in Universe at the top.
+        sorted_sos = sorted(sorted_sos, key=lambda x: len(x.intersection(universe)))[::-1]
+    return min_sos
+{{< /highlight >}}
