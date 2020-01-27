@@ -50,7 +50,7 @@ $$e.g.$$
 
 <p style="text-align:center">The optimal set cover solution $$O$$ of $$S$$ where $$S = \{\{1, 2\}, \{3, 4\}, \{2, 3\}\}$$ is $$\{\{1, 2\}, \{3, 4\}\}$$
 
-## Devising A Solution
+## Devising An Algorithm
 
 With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$, or $$P$$, contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in P$$. Therefore, every possible set cover solution in $$S$$ (be it optimal or suboptimal) can be found within $$P$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$P$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
 
@@ -100,7 +100,7 @@ def universe(sos):
 {1, 2, 3, 4, 5, 6}
 ```
 
-With these two functions at our disposal, we now have everything we need to implement our optimal set cover solution algorithm!
+With these two functions at our disposal, we now have everything we need to implement our optimal set cover solution algorithm:
 
 {{< highlight python >}}
 def optimal_set_cover(sos):
@@ -114,10 +114,52 @@ def optimal_set_cover(sos):
 {{< /highlight >}}
 ```
 >>> optimal_set_cover([{1, 2}, {2, 3}, {3, 4}])
-({1, 2}, {3, 4})
+[{1, 2}, {3, 4}]
 ```
 
-## Suboptimal Solutions
+Alright problem solved! Time to go home!
+
+...Right?
+
+## Analyzing Our Implementation
+
+Unfortunately, as you may have guessed when I mentioned deriving our answer from the power set of $$S$$, this algorithm is very, **VERY** slow. So slow that any attempt to generate a solution for more than 50 subsets is going to be realistically **impossible** to calculate. But wait, it gets worse; this is about as fast as generating optimal set cover solutions gets. Unfortunately, no algorithm exists that can generate an optimal set cover solution without having to calculate $$p(S)$$ in the worst case. As generating $$p(S)$$ has a worst case run time complexity of $$O(2^n)$$, no optimal set cover algorithm will ever achieve a better worst case run time complexity. Because of this, the set cover problem is said to fall under the class of [NP-Complete](https://en.wikipedia.org/wiki/NP-completeness) problems, a set of problems that are all extremely difficult to compute.
+
+To put into perspective how incredibly slow an algorithm with a worst case run time complexity greater than or equal to $$O(2^n)$$ is, lets create some benchmarks for our code. To properly benchmark our code however, we're going to need to first write a function to generate sufficiently complicated sets of subsets. This small helper function should do the trick.
+
+{{< highlight python >}}
+import random
+
+def generate_random_sos(num_elements, num_sets):
+    return [set([random.choice([z for z in range(1, num_elements + 1)])
+        for y in range(1, random.randint(1, num_elements))])
+        for x in range(num_sets)]
+{{< /highlight >}}
+
+```
+>>> generate_random_sos(5, 3)
+[{4, 5}, {3, 4}, {1, 5}]
+```
+
+Here are some
+Here's take a look at some benchmarks generated using our algorithm and the python `timeit` library. To build the sample inputs for these benchmarks, I wrote
+
+
+```
+
+```
+
+
+So that's it right? No solution exists that can realistically compute this problem for anything larger than a handful of sets and we're all doomed.
+
+...Right?
+
+Well, not all hope is lost if we're alright with moving the goal posts a little. Instead of trying to find the absolute optimal set cover solution for any given sos, what if we were okay with a solution that was **close-enough**In other words, a suboptimal solution. If so, we're back in business because there just so happens to be an algorithm that can generate a pretty good suboptimal set cover solution (how good is beyond the scope of this post, but you can read more [here](https://en.wikipedia.org/wiki/Set_cover_problem#Greedy_algorithm) if you'd like) that runs in $$O(n^2log(n))$$ time!
+
+## Devising An Algorithm
+
+## Implementation
+
 {{< highlight python >}}
 def suboptimal_set_cover(sos):
     u = universe(sos)
