@@ -52,76 +52,82 @@ $$e.g.$$
 
 ## Devising A Solution
 
-With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ (or $$P$$), contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in P$$. Therefore, every possible set cover of $$S$$ (be it optimal or suboptimal) can be found within $$P$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$P$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
+With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$, or $$P$$, contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in P$$. Therefore, every possible set cover solution in $$S$$ (be it optimal or suboptimal) can be found within $$P$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$P$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
 
+Ultimately, our solution is going to look something like:
 
     def optimal_set_cover(S)
         P = power_set(S)
         U = universe(S)
         O = S
         for each set PSi in P
-            KU = universe(PSi)
-            if KU == U and len(PSi) < len(O)
+            PSi_U = universe(PSi)
+            if PSi_U == U and len(PSi) < len(O)
                 O = PSi
         return O
 
-Alright! With some psuedocode to guide our path, let's see try and implement a working solution in Python.
+Alright! With some psuedocode to guide our path, let's try and implement a working solution in Python.
 
 ## Implementation
 
-For starters we're going to need to write a function to generate power sets. This here is a clever solution written by ________
+For starters we're going to need to write a function to generate power sets. As generating power sets isn't the focus of this post, we're simply going to use a recipe directly from the [python itertools recipe book](https://docs.python.org/3/library/itertools.html#itertools-recipes) to do it for us.
 
 {{< highlight python >}}
-def power_set(s):
-    cardinality = len(s)
-    ps = []
-    for a in range(1 << cardinality):
-        ps.append([s[b] for b in range(cardinality) if (a & (1 <<  b))])
-    return ps
+from itertools import chain, combinations
+
+def power_set(iterable):
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 {{< /highlight >}}
 
-We're also going to need a function to generate the universe of a set of subsets.
+```
+>>> [s for s in power_set([1, 2, 3])]
+[(), (1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3)]
+```
+Note, as you can see from the sample output, this is going to generate a list of tuples instead of sets like we might expect. We could easily modify this function to convert these tuples into sets, but doing so would significantly increase our final run time complexity. Given that our code will be able handle these tuples the same as if they were sets, this is an unnecessary step that I have intentionally left out.
+
+We're also going to need a function to generate the universe of a set of subsets. This will work pretty much exactly as described in the previous section of this post; simply iterate through a set of subsets (or sos) and union each one together to form the universe of that set of subsets.
 
 {{< highlight python >}}
-def generate_universe(sos):
-    result = set()
+def universe(sos):
+    u = set()
     for s in sos:
-        result = result.union(s)
-    return result
+        u = u.union(s)
+    return u
 {{< /highlight >}}
+```
+>>> universe([{1, 2, 3}, {4, 5}, {6}])
+{1, 2, 3, 4, 5, 6}
+```
 
-With these two pieces, we have all we need to finally implement our optimal set cover algorithm
+With these two functions at our disposal, we now have everything we need to implement our optimal set cover solution algorithm!
 
 {{< highlight python >}}
-def set_cover(sos):
-    universe = generate_universe(sos)
+def optimal_set_cover(sos):
+    u = universe(sos)
     power_sos = power_set(sos)
-    min_sos = sos
+    min_sos = sos # The minimal set cover solution found so far.
     for s in power_sos:
-        current_universe = generate_universe(s)
-        if current_universe == universe and len(s) < len(min_sos):
+        if universe(s) == u and len(s) < len(min_sos):
             min_sos = s
-    return min_sos
+    return list(min_sos)
 {{< /highlight >}}
-
-
-Oh no! This solution is super slow and a good solution doesn't exist! What to we do?
+```
+>>> optimal_set_cover([{1, 2}, {2, 3}, {3, 4}])
+({1, 2}, {3, 4})
+```
 
 ## Suboptimal Solutions
 {{< highlight python >}}
-def greedy_set_cover(sos):
-    universe = generate_universe(sos)
-    sorted_sos = sorted(sos, key=lambda x: len(x.intersection(universe)))
-    min_sos = []
-    known_universe = set()
-    while sorted_sos:
-        s = sorted_sos.pop()
-        if known_universe.union(s) != known_universe:
-            known_universe = known_universe.union(s)
-            min_sos.append(s)
-        if universe == known_universe:
-            break
-        # Put the set with the largest number of elements not yet in Universe at the top.
-        sorted_sos = sorted(sorted_sos, key=lambda x: len(x.intersection(universe)))[::-1]
+def suboptimal_set_cover(sos):
+    u = universe(sos)
+    min_sos = [] # The minimal set cover solution found so far.
+    ku = set() # The universe of elements seen so far, the "known universe".
+    while ku != u:
+        sos = sorted(sos, key=lambda s: len(s.difference(ku)))
+        s = sos.pop()
+        min_sos.append(s)
+        ku = ku.union(s)
+
     return min_sos
 {{< /highlight >}}
