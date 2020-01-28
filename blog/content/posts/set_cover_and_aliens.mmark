@@ -106,7 +106,7 @@ With these two functions at our disposal, we now have everything we need to impl
 def optimal_set_cover(sos):
     u = universe(sos)
     power_sos = power_set(sos)
-    min_sos = sos # The minimum length set cover found so far.
+    min_sos = sos # The minimum size set cover found so far.
     for s in power_sos:
         if universe(s) == u and len(s) < len(min_sos):
             min_sos = s
@@ -123,9 +123,9 @@ Alright, problem solved! Time to go home!
 
 ## Analyzing Our Implementation
 
-Unfortunately, as you may have guessed when I mentioned deriving our answer from the power set of $$S$$, this algorithm is very, **very** slow. So slow that any attempt to generate a solution for more than 50 subsets is going to be realistically **impossible** to calculate for any computer. But wait, it gets worse; this is about as fast as generating optimal set cover solutions gets. Unfortunately, no algorithm exists that can generate an optimal set cover solution without having to calculate $$p(S)$$ in the worst case. As generating $$p(S)$$ has a worst case run time complexity of $$O(2^n)$$, no optimal set cover algorithm will ever achieve a better worst case run time complexity than $$O(2^n)$$. Because of this, the set cover search problem is said to fall under the class of [NP-Complete](https://en.wikipedia.org/wiki/NP-completeness) problems, a class of problems that are all extremely difficult to compute.
+Unfortunately, as you may have guessed when I mentioned deriving our answer from the power set of $$S$$, this algorithm is very, **very** slow. So slow that any attempt to generate a solution for more than 50 subsets is going to be realistically **impossible** for any computer to calculate; and unfortunately, it gets worse. This is about as fast as generating optimal set covers gets. Unfortunately, no algorithm exists that can generate an optimal set cover without having to calculate $$p(S)$$ in the worst case. As generating $$p(S)$$ has a worst case run time complexity of $$O(2^n)$$, all optimal set cover algorithms are doomed to run in exponential time. Because of this, the set cover search problem is said to fall under the class of [NP-Complete](https://en.wikipedia.org/wiki/NP-completeness) problems, a class of problems that are all extremely difficult to compute.
 
-To put into perspective how incredibly slow an algorithm with a worst case run time complexity greater than or equal to $$O(2^n)$$ is, lets create some benchmarks for our code. To properly benchmark our code however, we're going to need to first write a function to generate sufficiently complicated sets of subsets. This small helper function should do the trick.
+To put into perspective how incredibly slow an algorithm with a worst case run time complexity of to $$O(2^n)$$ really is, lets write some benchmarks. To aid in benchmarking our code, I've written a little helper function generate random sets of subsets.
 
 {{< highlight python >}}
 import random
@@ -153,17 +153,17 @@ optimal_set_cover(generate_random_sos(30, 30)) # 6092.618 seconds
 All benchmarks were recorded on a 2014 Macbook Pro.
 ```
 
-Extrapolating upon this trend, we can estimate that calculating the optimal set cover for a set of subsets with 50 subsets and 50 unique elements would take over 200 years to compute!
+Extrapolating upon this trend, we can estimate that calculating the optimal set cover for any given $$S$$ with 50 subsets and 50 unique elements would take over 200 years to compute!
 
 So that's it right? No solution exists that can realistically compute this problem for anything larger than a handful of sets and we're all doomed.
 
 ...Right?
 
-Well, not all hope is lost if we're alright with moving the goal posts a little. Instead of trying to find the absolute optimal set cover solution for any given set of subsets, what if we were okay with a solution that was **close-enough**? In other words, a suboptimal solution. If so, we're back in business because there just so happens to be an algorithm that can generate a pretty good suboptimal set cover solution (how good is beyond the scope of this post, but you can read more [here](https://en.wikipedia.org/wiki/Set_cover_problem#Greedy_algorithm) if you'd like) that runs in $$O(n^2)$$ time!
+Well, not all hope is lost if we're alright with moving the goal posts a little. Instead of trying to find the absolute optimal set cover for any given set of subsets, what if we were okay with a solution that was **close-enough**? In other words, a suboptimal solution. If so, we're back in business because there just so happens to be an algorithm that can generate a pretty good suboptimal set covers (how good is beyond the scope of this post, but you can read more [here](https://en.wikipedia.org/wiki/Set_cover_problem#Greedy_algorithm) if you'd like) that runs in $$O(n^2)$$ time!
 
 ## Taking A Greedy Approach
 
-Key to most approximation algorithms is a solid heuristic, and this problem is no exception! One simple heuristic we could use is simply the size of each subset. After all, the larger the subset, the larger the amount of potentially uncovered elements that might exist in that subset. Using this heuristic, lets try implementing a greedy algorithm that builds a set cover solution by adding the largest sets first.
+Key to most approximation algorithms is a solid heuristic, and this problem is no exception! One simple heuristic we could use is simply the size of each subset. After all, the larger the subset, the larger the amount of potentially uncovered elements that might exist in that subset. Using this heuristic, lets try implementing a greedy algorithm that orders the subsets from largest to smallest, and then iteratively unions them together until we've achieved full set coverage.
 
 {{< highlight python >}}
 def suboptimal_set_cover_1(sos):
@@ -190,7 +190,7 @@ suboptimal_set_cover_1([{1, 2}, {3, 4}, {2, 3}, {2}])
 [{4, 5, 6}, {2, 3, 4}, {1, 2, 3}] # Yikes!
 ```
 
-So, our solution isn't perfect, but it's not the worst! Additionally, it's lightning fast compared to our previous algorithm, operating with a worst case run time complexity of $$O(nlog(n))$$ (the time complexity it takes to sort a set of subsets). Notably, our algorithm really suffers when faced with sets of subsets where most of the subsets are of a similar size. In the special case where all subsets are the same size, our algorithm completely falls flat, as all subsets are weighted equally according to our heuristic and as such our algorithm wont be able to make any meaningful decisions.
+So, our solution isn't perfect, but it's not the worst! Additionally, it's lightning fast compared to our previous algorithm, operating with a worst case run time complexity of $$O(nlog(n))$$ (the time complexity of sorting $$S$$ by the size of each subset). Notably, our algorithm really suffers when faced with an $$S$$ where most of the subsets are of a similar size. In the special case where all subsets are the exact same size, our algorithm completely falls flat! In such a situation, all subsets are weighted equally according to our heuristic and our algorithm is unable make any meaningful decisions.
 
 ## Fine Tuning Our Heuristic
 
@@ -219,8 +219,12 @@ suboptimal_set_cover_2([{1, 2}, {3, 4}, {2, 3}, {2}])
 
 ```
 
-One unfortunate side effect of this implementation is that it does increase the run time complexity to $$O(n^2)$$ This is a result of having to re-calculate the subset with the largest set difference from the known universe at each iteration, but this is a fine price to pay for greatly improved accuracy.
+One unfortunate side effect of this implementation is that it does increase the run time complexity to $$O(n^2)$$ This is a result of having to re-calculate the subset with the largest set difference from the known universe at each iteration. However, this is a fine price to pay for greatly improved performance.
 
 ## Conclusion
 
 If you've managed to make it all the way to the bottom of this post without skipping over any sections, congratulations! Hopefully it didn't take you as long to read as it did for me to write. This is my first time writing something as technical and math-y as this, so if you spot any issues (and I'm sure there are), please shoot me an email so that I can correct it. If you manage to come up with any other heuristics or significantly faster algorithms used to generate optimal or suboptimal set cover solutions, I'd love to hear about it, and may even include it at the bottom of this post (with your permission of course) for future readers to see.
+
+Lastly, be sure to check back on the 1st of March for what will hopefully be an exciting post on using Shannon Entropy to find secrets that have been accidentally committed to source code control systems (like Github).
+
+
