@@ -24,17 +24,17 @@ Additionally, your current circumstances indicate that you only need one of each
 
 ## Abstracting The Problem
 
-To start off with, we can think of our items and buildings as a set of subsets $$S = \{S_0, S_1, S_2\ ...\}$$, and the union of all subsets in $$S$$ as the universal set $$U$$. In mathematical notation:
+To start off with, we can think of our items and buildings as a set of subsets $$S = \{S_0, S_1, S_2\ ...\}$$, and the union of all subsets in $$S$$ as the universal set $$\mathbb{U}$$. In mathematical notation:
 
 $$
-U = \bigcup\limits^n _{i=0} S_i
+\mathbb{U} = \bigcup\limits^n _{i=0} S_i
 $$
 
 <p style="text-align:center"> where $$n$$ is the number of subsets in $$S$$.
 
 $$e.g.$$
 
-<p style="text-align:center">The universal set $$U$$ of $$\{\{1, 2\},\ \{4, 5\},\ \{2, 3\}\} = \{1, 2, 3, 4, 5\}$$
+<p style="text-align:center">The universal set $$\mathbb{U}$$ of $$\{\{1, 2\},\ \{4, 5\},\ \{2, 3\}\} = \{1, 2, 3, 4, 5\}$$
 
 Next, let's use $$O$$ to denote the **optimal** (or minimal) set cover of any given $$S$$. This is in contrast to a **suboptimal** set cover, which is a set cover solution that contains more than the **minimal** amount of subsets needed to achieve full set coverage.
 
@@ -52,13 +52,13 @@ $$
 
 ## Devising An Algorithm
 
-With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in p(S)$$. Therefore, every possible set cover in $$S$$ (be it optimal or suboptimal) can be found within $$p(S)$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$p(S)$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
+With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subseteq S$$, then $$O \in p(S)$$. Therefore, every possible set cover in $$S$$ (be it optimal or suboptimal) can be found within $$p(S)$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$p(S)$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = \mathbb{U}$$
 
 Ultimately, our solution is going to look something like this:
 
     def optimal_set_cover(S)
         P = p(S)
-        U = universe(S) # The universe of S
+        U = universe(S)
         O = S
         for each set Pi in P
             Pi_U = universe(Pi)
@@ -86,7 +86,7 @@ def power_set(iterable):
 ```
 As you can see from the sample output, this is going to generate a list of tuples instead of sets like we might expect. We could easily modify this function to convert these tuples into sets, but doing so would significantly increase our final run time complexity. Given that our code will be able handle these tuples the same as if they were sets (as they're both [iterables](https://docs.python.org/3/glossary.html)), this is an unnecessary step that I have intentionally left out.
 
-We're also going to need a function to generate the universe of a set of subsets. This will work pretty much exactly as described in the previous section of this post; simply iterate through a set of subsets (or sos) and union each one together to form the universe of that set of subsets.
+We're also going to need a function to generate the universe of any given $$S$$. This will work pretty much exactly as described in the previous section of this post; simply iterate through $$S$$ (labeled as "sos" in our code) and union each subset together to form the universe $$\mathbb{U}$$.
 
 {{< highlight python >}}
 def universe(sos):
@@ -106,7 +106,7 @@ With these two functions at our disposal, we now have everything we need to impl
 def optimal_set_cover(sos):
     u = universe(sos)
     power_sos = power_set(sos)
-    min_sos = sos # The minimal set cover solution found so far.
+    min_sos = sos # The minimum length set cover found so far.
     for s in power_sos:
         if universe(s) == u and len(s) < len(min_sos):
             min_sos = s
