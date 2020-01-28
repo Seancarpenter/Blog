@@ -159,11 +159,11 @@ So that's it right? No solution exists that can realistically compute this probl
 
 ...Right?
 
-Well, not all hope is lost if we're alright with moving the goal posts a little. Instead of trying to find the absolute optimal set cover solution for any given set of subsets, what if we were okay with a solution that was **close-enough**? In other words, a suboptimal solution. If so, we're back in business because there just so happens to be an algorithm that can generate a pretty good suboptimal set cover solution (how good is beyond the scope of this post, but you can read more [here](https://en.wikipedia.org/wiki/Set_cover_problem#Greedy_algorithm) if you'd like) that runs in $$O(n^2log(n))$$ time!
+Well, not all hope is lost if we're alright with moving the goal posts a little. Instead of trying to find the absolute optimal set cover solution for any given set of subsets, what if we were okay with a solution that was **close-enough**? In other words, a suboptimal solution. If so, we're back in business because there just so happens to be an algorithm that can generate a pretty good suboptimal set cover solution (how good is beyond the scope of this post, but you can read more [here](https://en.wikipedia.org/wiki/Set_cover_problem#Greedy_algorithm) if you'd like) that runs in $$O(n^2)$$ time!
 
 ## Taking A Greedy Approach
 
-Key to most approximation algorithms is a solid heuristic, and this problem is no exception! One simple heuristic we could use is simply the size of each subset. After all, the larger the subset, the larger the amount of potentially uncovered elements that might exist in that subset. Using this heuristic, lets try implementing a greedy algorithm that builds a set cover solution using only the largest sets.
+Key to most approximation algorithms is a solid heuristic, and this problem is no exception! One simple heuristic we could use is simply the size of each subset. After all, the larger the subset, the larger the amount of potentially uncovered elements that might exist in that subset. Using this heuristic, lets try implementing a greedy algorithm that builds a set cover solution by adding the largest sets first.
 
 {{< highlight python >}}
 def suboptimal_set_cover_1(sos):
@@ -190,9 +190,11 @@ suboptimal_set_cover_1([{1, 2}, {3, 4}, {2, 3}, {2}])
 [{4, 5, 6}, {2, 3, 4}, {1, 2, 3}] # Yikes!
 ```
 
-So, our solution isn't perfect, but it's not the worst! Additionally, it's lightning fast compared to our optimal set cover algorithm, operating with a worst case run time complexity of $$O(nlog(n))$$ (the time complexity it takes to sort our set of subsets). Notably, our algorithm really suffers when faced with sets of subsets where most of the subsets are of a similar same size. In the special case where all subsets are the same size, our algorithm completely falls flat, as all subsets are weighted equally according to our heuristic.
+So, our solution isn't perfect, but it's not the worst! Additionally, it's lightning fast compared to our previous algorithm, operating with a worst case run time complexity of $$O(nlog(n))$$ (the time complexity it takes to sort a set of subsets). Notably, our algorithm really suffers when faced with sets of subsets where most of the subsets are of a similar same size. In the special case where all subsets are the same size, our algorithm completely falls flat, as all subsets are weighted equally according to our heuristic and as such cannot make any meaningful decisions.
 
 ## Fine Tuning Our Heuristic
+
+Fortunately, we can do better than this by slightly changing our heuristic. What if instead of picking the largest subsets first, we instead picked the subsets that contain the **largest** amount of uncovered elements first? This should help us avoid situations where most of the subsets are of the same size, as well as prevent us from adding subsets just because they **may** contain more uncovered elements. This way, we'll **know** that they do.
 
 {{< highlight python >}}
 def suboptimal_set_cover_2(sos):
@@ -200,9 +202,26 @@ def suboptimal_set_cover_2(sos):
     min_sos = [] # The minimal set cover solution found so far.
     ku = set() # The universe of elements covered so far, the "known universe".
     while ku != u:
-        sos = sorted(sos, key=lambda s: len(s.difference(ku)))
-        s = sos.pop()
-        min_sos.append(s)
-        ku = ku.union(s)
+        max_s = max(sos, key=lambda s: s.difference(ku))
+        ku = ku.union(max_s)
+        min_sos.append(max_s)
     return min_sos
 {{< /highlight >}}
+```
+>>> suboptimal_set_cover_2([{1, 2, 3}, {4, 5}, {3}])
+[{1, 2, 3}, {4, 5}] # Perfect!
+
+suboptimal_set_cover_2([{1, 2}, {3, 4}, {2, 3}, {2}])
+[{1, 2}, {3, 4}] # Perfect!
+
+>>> suboptimal_set_cover_2([{2, 3, 4, 5}, {1, 2, 3, 4}, {4, 5, 6}, {1, 2, 3}])
+[{2, 3, 4, 5}, {1, 2, 3, 4}, {4, 5, 6}] # Not perfect but I'll take it.
+
+```
+
+One unfortunate side effect of this implementation is that it does increase the run time complexity to $$O(n^2)$$ due to having to constantly re-calculate the subset with the largest set difference from the known universe, but this is a fine price to pay for greatly improved accuracy.
+
+## Conclusion
+
+If you've managed to make it all the way to the bottom of this post without skipping over any sections, congratulations! Hopefully it didn't take you as long to read as it did for me to write. This is my first time writing something as technical and math-y as this, so if you spot any issues (and I'm sure there are), please shoot me an email so that I can correct it. If you manage to come up with any other heuristics or significantly faster algorithms used to generate optimal or suboptimal set cover solutions, I'd also to love to hear about it, and may even include it at the bottom of this post (with your permission of course) for future readers to see.
+
