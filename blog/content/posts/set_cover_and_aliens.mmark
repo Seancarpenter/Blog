@@ -15,11 +15,11 @@ The year is 3000. Aliens have invaded and enslaved nearly the entire human race.
 
 ![All Items](/images/posts/2020/set_cover_and_aliens/all_items.png)
 
-You've been hiding out here for a long time, and as such are rather familiar with the area. You know exactly where to find these items, but traveling to the different buildings for supplies is going to be risky. While you are out in the open, you're at risk of being abducted by a roving UFO's tractor beam, vaporized, or worse! Analyzing a map of the area indicates that there are 4 buildings within equal distance from your safe house that combined have all of the resources you need.
+You've been hiding out here for a long time, and as such are rather familiar with the area. You know exactly where to find these items, but traveling to the different buildings for supplies is going to be dangerous. While traveling between buildings, you're at risk of being abducted by a roving UFO's tractor beam, vaporized, or worse! Analyzing a map of the area indicates that there are 4 buildings within equal distance from your safe house that combined have all of the resources you need.
 
 ![The Scenario](/images/posts/2020/set_cover_and_aliens/scenario.png)
 
-Additionally, your current circumstances indicate that you only need one of each item. Retrieving more than one copy of each item is simply not going to increase your chances of survival. With that in mind, which of these buildings should you visit to get **all** the items you need in the **minimum** amount of trips? At a glance, it should be easy to tell that we should visit **Building 1** and **Building 4** to get the supplies we need, and that the minimum number of trips that we'll need to make to get all of our supplies is **2**. However, what if we wanted to gather 100 items from 20 different buildings? Well, we'd need to come up with an algorithm of course! As we'll soon find out, hidden within this relatively silly scenario is a deceptively hard problem known as the [Set Cover Search Problem](https://en.wikipedia.org/wiki/Set_cover_problem). Before we try and come up with an algorithm however, let's take a step back and see if we can turn this problem into something a bit more generic.
+Additionally, your current circumstances indicate that you only need one of each item. Retrieving more than one copy of each item is simply not going to increase your chances of survival. With this in mind, which of these buildings should you visit to get **all** the items you need in the **minimum** amount of trips? At a glance, it should be easy to tell that we should visit **building 1** and **building 4** to get the supplies we need, and that the minimum number of trips that we'll need to make to get all of our supplies is **2**. However, what if we wanted to gather 100 items from 20 different buildings? Well, we'd need to come up with an algorithm of course! As we'll soon find out, hidden within this relatively silly scenario is a deceptively hard problem known as the [Set Cover Search Problem](https://en.wikipedia.org/wiki/Set_cover_problem). Before we try and come up with an algorithm however, let's take a step back and see if we can turn this problem into something a bit more generic.
 
 
 ## Abstracting The Problem
@@ -36,7 +36,13 @@ $$e.g.$$
 
 <p style="text-align:center">The universal set $$U$$ of $$\{\{1, 2\},\ \{4, 5\},\ \{2, 3\}\} = \{1, 2, 3, 4, 5\}$$
 
-Next, we're going to use the variable $$P$$ to denote the [power set](https://en.wikipedia.org/wiki/Power_set) of $$S$$, or $$p(S)$$. The power set is defined as the set of all subsets of a given set, including the empty set $$\emptyset$$ and $$S$$ itself.
+Next, let's use $$O$$ to denote the **optimal** (or minimal) set cover of any given $$S$$. This is in contrast to a **suboptimal** set cover, which is a set cover solution that contains more than the **minimal** amount of subsets needed to achieve full set coverage.
+
+$$e.g.$$
+
+<p style="text-align:center">The optimal set cover solution $$O$$ of $$S$$ where $$S = \{\{1, 2\}, \{3, 4\}, \{2, 3\}\}$$ is $$\{\{1, 2\}, \{3, 4\}\}$$
+
+Lastly, we're going to use the function $$p(S)$$ to denote the [power set](https://en.wikipedia.org/wiki/Power_set) of $$S$$. The power set is defined as the set of all combinations of elements in a given set, including the empty set $$\emptyset$$ and $$S$$ itself.
 
 $$e.g.$$
 
@@ -44,26 +50,20 @@ $$
 p(\{1, 2\}) = \{\{\emptyset\},\ \{1\},\ \{2\},\ \{1, 2\}\}
 $$
 
-Lastly, let's use $$O$$ to denote the **optimal** (or minimal) set cover solution to any $$S$$. This is in contrast to a **suboptimal** set cover solution, which is a set cover solution that is **not** minimal.
-
-$$e.g.$$
-
-<p style="text-align:center">The optimal set cover solution $$O$$ of $$S$$ where $$S = \{\{1, 2\}, \{3, 4\}, \{2, 3\}\}$$ is $$\{\{1, 2\}, \{3, 4\}\}$$
-
 ## Devising An Algorithm
 
-With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$, or $$P$$, contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in P$$. Therefore, every possible set cover solution in $$S$$ (be it optimal or suboptimal) can be found within $$P$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$P$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
+With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subset S$$, then $$O \in p(S)$$. Therefore, every possible set cover in $$S$$ (be it optimal or suboptimal) can be found within $$p(S)$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$p(S)$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = U$$
 
 Ultimately, our solution is going to look something like this:
 
     def optimal_set_cover(S)
-        P = power_set(S)
-        U = universe(S)
+        P = p(S)
+        U = universe(S) # The universe of S
         O = S
-        for each set PSi in P
-            PSi_U = universe(PSi)
-            if PSi_U == U and len(PSi) < len(O)
-                O = PSi
+        for each set Pi in P
+            Pi_U = universe(Pi)
+            if Pi_U == U and len(Pi) < len(O)
+                O = Pi
         return O
 
 Alright! With some psuedocode to guide our path, let's try and implement a working solution in Python.
