@@ -1,7 +1,7 @@
 +++
 title = "Set Cover and Aliens"
 author = "Sean Carpenter"
-date = "2020-01-29"
+date = "2020-02-01"
 description = "A close look at the classic set cover search problem through a post-apocalyptic lens"
 featured_image = "posts/2020/set_cover_and_aliens/alien_abduction.png"
 libraries = ["katex"]
