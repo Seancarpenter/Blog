@@ -86,7 +86,7 @@
     }
 
     h1,
-    h2 {
+    h2, h3, h4 {
       @include themify($themes) {
         color: themed("single-contents-title-color");
       }
