@@ -17,7 +17,7 @@ Opinionator is an educational blog comprised of mostly the following topics:
 - Concurrent and Distributed Systems
 - Computer Architecture
 
-All content on Opinionator is provided **free of charge** and is **not monetized** in any form. You will not find any ads on Opinionator, nor will Opinionator track you or remember anything about you between visits. All links to external resources are **unaffiliated** and do not benefit me in any way. As a result, if a link on my website redirects you to a paid product (such as a textbook) it is because I am of the opinion that it is worth purchasing, and almost certainly own a copy myself.
+All content on Opinionator is provided **free of charge** and is **not monetized** in any form. You will not find any ads on Opinionator, nor will Opinionator track you or remember anything about you between visits. All links to external resources are **unaffiliated** and do not benefit me in any way. As a result, if a link on my website redirects you to a paid product (such as a textbook), it is because I am of the opinion that it is worth purchasing, and almost certainly own a copy myself.
 
 If you'd like to see how Opinionator was built, you can find the source code for it [here](https://github.com/Seancarpenter/blog).
 
