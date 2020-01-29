@@ -6,7 +6,7 @@ date = "2020-01-01"
 +++
 
 # Hey There!
-I'm a software engineer with a background in a variety of different programming and computer science topics. In my spare time, I write [free and open source](https://en.wikipedia.org/wiki/Free_and_open-source_software) software and talk about it on the internet.
+My name is Sean. I'm a software engineer with a background and interest in a variety of different software development and computer science topics. In my spare time, I write [free and open source](https://en.wikipedia.org/wiki/Free_and_open-source_software) software and talk about it on the internet.
 
 ### About The Blog
 Opinionator is an educational blog comprised of mostly the following topics:
