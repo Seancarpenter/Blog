@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     margin: 0.5rem;
-    font-family: $title-font;
+    font-family: 'Arimo', sans-serif;
 
     &--title {
       @include themify($themes) {
@@ -13,10 +13,10 @@
     }
 
     &--desc {
-      font-family: $content-font;
+      font-family: 'Arimo', sans-serif;
       font-weight: italic;
       padding: 1rem;
-      line-height: 1.7rem;      
+      line-height: 1.7rem;
     }
   }
 }
