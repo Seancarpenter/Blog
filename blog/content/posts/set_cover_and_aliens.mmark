@@ -36,13 +36,13 @@ $$e.g.$$
 
 <p style="text-align:center">The universal set $$\mathbb{U}$$ of $$\{\{1, 2\},\ \{4, 5\},\ \{2, 3\}\} = \{1, 2, 3, 4, 5\}$$
 
-Next, let's use $$O$$ to denote the **optimal** (or minimal) set cover of any given $$S$$. This is in contrast to a **suboptimal** set cover, which is a set cover solution that contains more than the **minimal** amount of subsets needed to achieve full set coverage.
+Next, let's use $$O$$ to denote the **optimal** (or minimum) set cover of any given $$S$$. This is in contrast to a **suboptimal** set cover, which is a set cover solution that contains more than the **minimum** amount of subsets needed to achieve full set coverage.
 
 $$e.g.$$
 
 <p style="text-align:center">The optimal set cover solution $$O$$ of $$S$$ where $$S = \{\{1, 2\}, \{3, 4\}, \{2, 3\}\}$$ is $$\{\{1, 2\}, \{3, 4\}\}$$
 
-Lastly, we're going to use the function $$p(S)$$ to denote the [power set](https://en.wikipedia.org/wiki/Power_set) of $$S$$. The power set is defined as the set of all combinations of elements in a given set, including the empty set $$\emptyset$$ and $$S$$ itself.
+Lastly, we're going to use the function $$p(S)$$ to denote the [power set](https://en.wikipedia.org/wiki/Power_set) of $$S$$. The power set is defined as the set of all subsets of any given $$S$$, including the empty set $$\emptyset$$ and $$S$$ itself.
 
 $$e.g.$$
 
@@ -52,7 +52,7 @@ $$
 
 ## Devising An Algorithm
 
-With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ contains all possible combinations of subsets in $$S$$, and our optimal solution $$O \subseteq S$$, then $$O \in p(S)$$. Therefore, every possible set cover in $$S$$ (be it optimal or suboptimal) can be found within $$p(S)$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$p(S)$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = \mathbb{U}$$
+With these tools at our disposal, lets see if we can come up with an algorithm. To start, one can readily deduce that if the power set $$p(S)$$ contains all the subsets of $$S$$, and our optimal solution $$O \subseteq S$$, then $$O \in p(S)$$. Therefore, every possible set cover in $$S$$ (be it optimal or suboptimal) can be found within $$p(S)$$ as well. As a result, finding $$O$$ is as simple as iterating through all of the sets in $$p(S)$$ to find the set $$S$$ with the least amount of subsets where $$\bigcup\limits^n _i S_i = \mathbb{U}$$
 
 Ultimately, our solution is going to look something like this:
 
@@ -169,7 +169,7 @@ Key to most approximation algorithms is a solid heuristic, and this problem is n
 def suboptimal_set_cover_1(sos):
     u = universe(sos)
     sos = sorted(sos, key=len)
-    min_sos = [] # The minimal set cover solution found so far.
+    min_sos = [] # The minimum set cover solution found so far.
     ku = set() # The universe of elements covered so far, the "known universe".
     while ku != u:
         s = sos.pop()
@@ -199,7 +199,7 @@ Fortunately, we can do better than this by slightly changing our heuristic. What
 {{< highlight python >}}
 def suboptimal_set_cover_2(sos):
     u = universe(sos)
-    min_sos = [] # The minimal set cover solution found so far.
+    min_sos = [] # The minimum set cover solution found so far.
     ku = set() # The universe of elements covered so far, the "known universe".
     while ku != u:
         max_s = max(sos, key=lambda s: s.difference(ku))
