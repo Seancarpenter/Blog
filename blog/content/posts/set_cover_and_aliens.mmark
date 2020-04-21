@@ -223,8 +223,6 @@ One unfortunate side effect of this implementation is that it does increase the 
 
 ## Conclusion
 
-If you've managed to make it all the way to the bottom of this post without skipping over any sections, congratulations! Hopefully it didn't take you as long to read as it did for me to write. This is my first time writing something as technical and math-y as this, so if you spot any issues (and I'm sure there are), please shoot me an email so that I can correct it. If you manage to come up with any other heuristics or significantly faster algorithms used to generate optimal or suboptimal set cover solutions, I'd love to hear about it, and may even include it at the bottom of this post (with your permission of course) for future readers to see.
-
-Lastly, be sure to check back on the 1st of March for what will hopefully be an exciting post on using [Shannon Entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) to find secrets that have been accidentally committed to source code control systems (like Github).
+If you've managed to make it all the way to the bottom of this post without skipping over any sections, congratulations! Hopefully it didn't take you as long to read as it did for me to write. This is my first time writing something as technical as this, so if you spot any issues (and I'm sure there are), please shoot me an email so that I can correct it. If you manage to come up with any other heuristics or significantly faster algorithms used to generate optimal or suboptimal set cover solutions, I'd love to hear about it, and may even include it at the bottom of this post (with your permission of course) for future readers to see.
 
 
