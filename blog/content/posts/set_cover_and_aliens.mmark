@@ -221,8 +221,3 @@ suboptimal_set_cover_2([{1, 2}, {3, 4}, {2, 3}, {2}])
 
 One unfortunate side effect of this implementation is that it does increase the run time complexity to $$O(n^2)$$ This is a result of having to re-calculate the subset with the largest set difference from the known universe at each iteration. However, this is a fine price to pay for greatly improved performance.
 
-## Conclusion
-
-If you've managed to make it all the way to the bottom of this post without skipping over any sections, congratulations! Hopefully it didn't take you as long to read as it did for me to write. This is my first time writing something as technical as this, so if you spot any issues (and I'm sure there are), please shoot me an email so that I can correct it. If you manage to come up with any other heuristics or significantly faster algorithms used to generate optimal or suboptimal set cover solutions, I'd love to hear about it, and may even include it at the bottom of this post (with your permission of course) for future readers to see.
-
-

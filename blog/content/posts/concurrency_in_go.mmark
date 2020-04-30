@@ -272,12 +272,6 @@ Worker 3 : has left the critical section.
 Worker 6 : has entered the critical section.
 ```
 
-## Conclusion
-
-Well that's about it really! Hopefully you found this post useful. February's post will be all about exploring heuristic based algorithms used to generate sub-optimal [set cover](https://en.wikipedia.org/wiki/Set_cover_problem) solutions, so be sure to check back on the 1st if that sounds interesting to you.
-
-If you have any suggestions, feedback or stumble across any bugs or typos, feel free to shoot me an email at  seancarpenter10@gmail.com
-
 ## Additional Resources
 
 - Rob Pike - [Go Concurrency Patterns](https://talks.golang.org/2012/concurrency.slide#1)
