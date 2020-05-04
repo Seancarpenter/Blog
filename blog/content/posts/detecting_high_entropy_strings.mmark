@@ -41,7 +41,7 @@ However, there are two readily available heurisitics we can use to compare`aardv
 8.571428571428571
 ```
 
-At 20 characters long, `pvreskzgoqrxyjfsqylc` is more than twice as long as the average, while `aardvark` at 8 characters long, is about as close to the average as any sequence of characters can get. Given that most of the words in the english language are far shorter than 20 characters in length, this dramatic difference in length is ultimately something we'll want to take into account.
+At 20 characters long, `pvreskzgoqrxyjfsqylc` is more than twice as long as the average string in our set, while `aardvark`, at 8 characters long, is about as close to the average as any string can get. Given that most of the words in the english language are far shorter than 20 characters in length, this dramatic difference in length is ultimately something we'll want to take into account.
 
 The second heuristic we can use is the probability of each individual character occuring within a given string in relation to the larger set of strings. In order to determine this, we'll need to build a simple probability distribution table. This is easily accomplished by iterating through our set of strings, and counting how many times each character occurs.
 
@@ -97,7 +97,7 @@ u: 0.00%
 w: 0.00%
 ```
 
-At a glance, it's easy to tell that some letters occur more frequently than others. Given that the majority of strings in our set were all chosen from the English dictionary in alphabetical order, a bias towards vowels like `a` and `e`, and consonants like `b` and `d` , over consonants like `z` and `w` is to be expected. Additionally, as can be exhibited by the following probability distribution table generated from a relatively comprehensive list of all words in the English language, these dramatic differences in probability are not isolated to our comparitvely small set of strings.
+At a glance, it's easy to tell that some letters occur more frequently than others. Given that the majority of strings in our set were all chosen from the English dictionary in alphabetical order, a bias towards vowels like `a` and `e`, and consonants like `b` and `d` , over consonants like `z` and `w` is to be expected. Additionally, as can be exhibited by the following probability distribution table generated from a [relatively comprehensive list of words in the English language](https://github.com/Seancarpenter/blog-content/blob/master/2020/detecting_secrets_using_entropy/english.txt), these dramatic differences in probability are not isolated to our comparitvely small set of strings.
 
 {{< highlight python >}}
 def ingest_dictionary(file_name):
@@ -138,3 +138,4 @@ x: 0.29%
 j: 0.19%
 q: 0.18%
 ```
+
