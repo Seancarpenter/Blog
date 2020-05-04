@@ -1,0 +1,50 @@
++++
+title = "Detecting High Entropy Sequences"
+author = "Sean Carpenter"
+date = "2020-02-02"
+description = "A unique and effective approach to finding randomly generated sequences."
+featured_image = "posts/2020/set_cover_and_aliens/alien_abduction.png"
+libraries = ["katex"]
++++
+
+### Introduction
+
+The entropy of a sequence can be broadly understood to represent the irregularity of that sequence in relation to another (typically much larger) set of sequences. Take the following example:
+
+```
+aardvark, abadon, abdicate, pvreskzgoqrxyjfsqylc, abide, ability, abject
+```
+
+At a glance, it should be clear that `pvreskzgoqrxyjfsqylc` is the odd one out, and if we look at the source of each of these sequences, it should be easy to see why, `aardvark, abadon, abdicate, abide, ability` and `abject` were all pulled from the first page of the nearest dictionary I could find, and `pvreskzgoqrxyjfsqylc` was randomly generated using a simple Python function I wrote.
+
+{{< highlight python >}}
+import string
+import random
+
+def generate_random_string(length):
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(length))
+{{< /highlight >}}
+
+```
+>>> generate_random_string(20)
+pvreskzgoqrxyjfsqylc
+```
+
+Mathematically speaking however, what actually makes `pvreskzgoqrxyjfsqylc` stand out from the rest of the strings in the set? Humans are exceptional at recognizing strings and sequences (this one holds meaning, this one does not), but a computer has no latent ability to understand that an `aardvark` is a small nocturnal mammal that feeds mostly on ants and termites, and that `pvreskzgoqrxyjfsqylc` is a meaningless jumble of characters.
+
+However, there are two readily available heurisitics we can use to compare`aardvark` and `pvreskzgoqrxyjfsqylc` without any outside knowledge of the physical world or the English language. The first is the length of these two strings.
+
+```
+>>> strings = ["aardvark", "abadon", "abdicate", "pvreskzgoqrxyjfsqylc", "abide", "ability", "abject"]
+>>> average_length = sum([len(s) for s in strings]) / len(strings)
+>>> average_length
+8.571428571428571
+```
+
+At 20 characters long, `pvreskzgoqrxyjfsqylc` is more than twice as long as the average, while `aardvark` at 8 characters long, is about as close to the average as any sequence of characters can get.
+
+The second heuristic we can use is the probability of each individual character occuring within a given string in relation to the larger set of strings. In order to determine this, we'll need to build a simple probability distribution table. This is easily accomplished by iterating through our set of strings, and counting how many times each character occurs.
+
+
+
+
