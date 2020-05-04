@@ -2,7 +2,7 @@
 title = "Detecting High Entropy Sequences"
 author = "Sean Carpenter"
 date = "2020-02-02"
-description = "A unique and effective approach to finding randomly generated sequences."
+description = "A statisitcal approach to finding randomly generated strings."
 featured_image = "posts/2020/set_cover_and_aliens/alien_abduction.png"
 libraries = ["katex"]
 +++
@@ -41,10 +41,100 @@ However, there are two readily available heurisitics we can use to compare`aardv
 8.571428571428571
 ```
 
-At 20 characters long, `pvreskzgoqrxyjfsqylc` is more than twice as long as the average, while `aardvark` at 8 characters long, is about as close to the average as any sequence of characters can get.
+At 20 characters long, `pvreskzgoqrxyjfsqylc` is more than twice as long as the average, while `aardvark` at 8 characters long, is about as close to the average as any sequence of characters can get. Given that most of the words in the english language are far shorter than 20 characters in length, this dramatic difference in length is ultimately something we'll want to take into account.
 
 The second heuristic we can use is the probability of each individual character occuring within a given string in relation to the larger set of strings. In order to determine this, we'll need to build a simple probability distribution table. This is easily accomplished by iterating through our set of strings, and counting how many times each character occurs.
 
+{{< highlight python >}}
+def generate_pd_table(strings):
+    pd_table = {c: 0 for c in string.ascii_lowercase}
+    num_characters = 0
+    for s in strings:
+        for c in s:
+            if c in string.ascii_lowercase:
+                num_characters += 1
+                pd_table[c] += 1
 
+    return {c: pd_table[c] / max(1, num_characters) for c in string.ascii_lowercase}
 
+def print_pd_table(pd_table):
+    for c in sorted(pd_table.keys(), key=lambda c: pd_table[c], reverse=True):
+        bar = ("█" * (int(pd_table[c] * 100 / 0.5))).strip()
+        print(f"{c}: {bar} {pd_table[c] * 100:.2f}%")
 
+{{< /highlight >}}
+
+```
+>>> strings = ["aardvark", "abadon", "abdicate", "pvreskzgoqrxyjfsqylc", "abide", "ability", "abject"]
+>>> pd_table = generate_pd_table(strings)
+>>> print_pd_table(pd_table)
+
+a: █████████████████████████████████ 16.67%
+b: ████████████████ 8.33%
+d: █████████████ 6.67%
+e: █████████████ 6.67%
+i: █████████████ 6.67%
+r: █████████████ 6.67%
+c: ██████████ 5.00%
+t: ██████████ 5.00%
+y: ██████████ 5.00%
+j: ██████ 3.33%
+k: ██████ 3.33%
+l: ██████ 3.33%
+o: ██████ 3.33%
+q: ██████ 3.33%
+s: ██████ 3.33%
+v: ██████ 3.33%
+f: ███ 1.67%
+g: ███ 1.67%
+n: ███ 1.67%
+p: ███ 1.67%
+x: ███ 1.67%
+z: ███ 1.67%
+h: 0.00%
+m: 0.00%
+u: 0.00%
+w: 0.00%
+```
+
+At a glance, it's easy to tell that some letters occur more frequently than others. Given that the majority of strings in our set were all chosen from the English dictionary in alphabetical order, a bias towards vowels like `a` and `e`, and consonants like `b` and `d` , over consonants like `z` and `w` is to be expected. Additionally, as can be exhibited by the following probability distribution table generated from a relatively comprehensive list of all words in the English language, these dramatic differences in probability are not isolated to our comparitvely small set of strings.
+
+{{< highlight python >}}
+def ingest_dictionary(file_name):
+    with open(file_name) as file:
+        strings = file.read().replace("\n", " ").split(" ")
+    return strings
+{{< /highlight >}}
+
+```
+>>> strings = ingest_dictionary("english.txt")
+>>> pd_table = generate_pd_table(strings)
+>>> print_pd_table(pd_table)
+
+e: ███████████████████████ 11.61%
+s: █████████████████ 8.91%
+i: █████████████████ 8.76%
+a: ███████████████ 7.61%
+r: ██████████████ 7.38%
+n: █████████████ 6.94%
+t: █████████████ 6.65%
+o: ████████████ 6.14%
+l: ██████████ 5.38%
+c: ████████ 4.05%
+d: ███████ 3.67%
+u: ██████ 3.34%
+g: █████ 2.88%
+p: █████ 2.82%
+m: █████ 2.75%
+h: ████ 2.22%
+b: ███ 1.96%
+y: ███ 1.69%
+f: ██ 1.37%
+v: ██ 1.04%
+k: █ 0.87%
+w: █ 0.86%
+z: 0.44%
+x: 0.29%
+j: 0.19%
+q: 0.18%
+```
