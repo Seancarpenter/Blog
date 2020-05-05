@@ -22,7 +22,7 @@ import string
 import random
 
 def generate_random_string(length):
-    return "".join(random.choice(string.ascii_lowercase) for _ in range(length))
+    return "".join(string.ascii_lowercase) for _ in range(length))
 {{< /highlight >}}
 
 ```
@@ -46,16 +46,18 @@ At 20 characters long, `pvreskzgoqrxyjfsqylc` is more than twice as long as the 
 The second heuristic we can use is the probability of each individual character occuring within a given string in relation to the larger set of strings. In order to determine this, we'll need to build a simple probability distribution table. This is easily accomplished by iterating through our set of strings, and counting how many times each character occurs.
 
 {{< highlight python >}}
+VALID_CHARS = set(string.ascii_lowercase)
+
 def generate_pd_table(strings):
-    pd_table = {c: 0 for c in string.ascii_lowercase}
+    pd_table = {c: 0 for c in VALID_CHARS}
     num_characters = 0
     for s in strings:
         for c in s:
-            if c in string.ascii_lowercase:
+            if c in VALID_CHARS:
                 num_characters += 1
                 pd_table[c] += 1
 
-    return {c: pd_table[c] / max(1, num_characters) for c in string.ascii_lowercase}
+    return {c: pd_table[c] / max(1, num_characters) for c in VALID_CHARS}
 
 def print_pd_table(pd_table):
     for c in sorted(pd_table.keys(), key=lambda c: pd_table[c], reverse=True):
@@ -157,7 +159,25 @@ By explicitely taking into account the probability of each individual character 
 
 For the sake of brevity, I've left out most of the theory required to understand how exactly Shannon Entropy works, but if you'd like to learn more about the formula, this [brief paper](https://arxiv.org/ftp/arxiv/papers/1405/1405.2061.pdf) by Sriram Vajapeyam is a great place to start. If that isn't enough for you, [*Entropy and Information Theory*](https://ee.stanford.edu/~gray/it.html) by Robert Gray should almost certainly do the trick.
 
-With formula in hand, implementing our entropy function should be a breeze.
+With formula in hand, let's see if we can properly implement it:
+
+{{< highlight python >}}
+def entropy(s, pd_table):
+    entropy = 0
+    for c in s:
+        if c in VALID_CHARS and pd_table[c] > 0:
+            entropy += (1 / pd_table[c]) * math.log2(1 / pd_table[c])
+
+    return entropy
+{{< /highlight>}}
+
+```
+>>> entropy("xywjz", pd_table)
+10649.261670477576
+>>> entropy("apple", pd_table)
+518.3318569640584
+```
+A discerning eye can pinpoint
 
 
 
