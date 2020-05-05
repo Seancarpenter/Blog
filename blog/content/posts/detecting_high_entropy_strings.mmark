@@ -100,14 +100,14 @@ w: 0.00%
 At a glance, it's easy to tell that some letters occur more frequently than others. Given that the majority of strings in our set were all chosen from the English dictionary in alphabetical order, a bias towards vowels like `a` and `e`, and consonants like `b` and `d` , over consonants like `z` and `w` is to be expected. Additionally, as can be exhibited by the following probability distribution table generated from a [relatively comprehensive list of words in the English language](https://github.com/Seancarpenter/blog-content/blob/master/2020/detecting_secrets_using_entropy/english.txt), these dramatic differences in probability are not isolated to our comparitvely small set of strings.
 
 {{< highlight python >}}
-def ingest_dictionary(file_name):
+def ingest_text(file_name):
     with open(file_name) as file:
         strings = file.read().replace("\n", " ").split(" ")
     return strings
 {{< /highlight >}}
 
 ```
->>> strings = ingest_dictionary("english.txt")
+>>> strings = ingest_text("english.txt")
 >>> pd_table = generate_pd_table(strings)
 >>> print_pd_table(pd_table)
 
@@ -143,7 +143,7 @@ So, with our heuristics defined, lets take a look at actually using them to calc
 
 ### Calculating Entropy
 
-At the core of our algorithm is a relatively simple formula referred to as Shannon Entropy.
+At the core of our algorithm is a relatively simple formula known as Shannon Entropy.
 
 $$H(x) = -\sum\limits^n_{i=1} P(x_i)\ log_2\ P(x_i)$$
 
@@ -152,8 +152,6 @@ In this formula,
 $$H(x)$$ is the calculated entropy of a given sequence x.
 
 $$P(x_i)$$ is the probability of the $$ith$$ value in the sequence $$x$$ occuring.
-
-In regards to our application, $$P(x_i)$$ will represent the probability of any given character occuring in our string.
 
 By explicitely taking into account the probability of each individual character occuring, and summing each character across the entire length of the string, Shannon Entropy properly factors in both of our heurisitics.
 
