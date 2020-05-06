@@ -265,4 +265,42 @@ def print_highest_entropies(entropies, amount=10):
 10  | 6252.42  | jewellery                      | [9906]
 ```
 
-Huge success! Our program managed to pick out our randomly generated secrets with extreme confidence.
+Huge success! Our program managed to pick out our randomly generated secrets with extremely high confidence. Additionally, our program also returns what lines these secrets were found on, so tracking down the offending strings and removing them is a breeze. With a little bit of elbow grease, we could easily take our program and extend it to examine entire directories, and beyond that, have it search through the entire git history of git projects as well.
+
+On that note, if you're looking at this and thinking "Gee whiz, this sure would be an awesome tool to use to scan my own repos", and are considering rolling your own solution, it's extremely important that you make sure that the source you use to build you probability distribution table is something that actually resembles the files you're ultimately going to be scanning. A dictionary containing all of the words in the English language is an excellent source to build our probability distribution table when our goal is to scan a book *written* in English, but a rather poor source if we want to scan source code. For one, there are all sorts of special symbols and characters that appear in programming languages that are going to be totally absent from an English dictionary, such as `_`, `%` and `*`. Of the characters that *are* present in both an English dictionary and a source code file, the frequency of those characters are liable to be very different. For example, i went ahead and scanned the source file that contains all of the code for this post, and generated the following probability distribution table:
+
+```
+e: ███████████████████████████ 13.72%
+t: ████████████████████ 10.46%
+r: ███████████████████ 9.53%
+n: █████████████████ 8.73%
+i: ██████████████ 7.46%
+o: ██████████████ 7.33%
+p: ███████████ 5.53%
+d: █████████ 5.00%
+a: █████████ 4.93%
+s: █████████ 4.73%
+l: ███████ 3.93%
+c: █████ 2.86%
+f: █████ 2.53%
+m: ███ 1.87%
+w: ███ 1.87%
+b: ███ 1.80%
+g: ███ 1.73%
+h: ██ 1.33%
+u: ██ 1.33%
+x: ██ 1.27%
+y: ██ 1.13%
+k:  0.40%
+v:  0.20%
+j:  0.20%
+z:  0.13%
+q:  0.00%
+```
+
+While it bears some similarties to the probability distribution table we generated from the English dictionary, there are some distinctive differences. For one, `x` has more than 6 times the amount of representation in our source code file, and `a` is a couple points lower than it should be. Now, this may be a result of the source code file that I scanned being significantly smaller than the English dictionray, but I digress, the point still stands.
+
+### Visualizing Entropy
+
+Before we wrap this up, lets see if we can generate some neat visuals by programmatically building a heatmap that corresponds to the entropies of each individual word in a large body of text. Doing so should be easy enough, just normalize the values of our entropies between 0 and 1 (0 being the smallest entropy we found, and 1 being the largest), and then color the pixels in our image corresponding to the characters in our text, and we're done! In order to accomplish this, I used the Python Imaging Library [Pillow](https://python-pillow.org/).
+
