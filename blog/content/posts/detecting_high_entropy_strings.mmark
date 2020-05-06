@@ -48,15 +48,17 @@ The second heuristic we can use is the probability of each individual character 
 {{< highlight python >}}
 VALID_CHARS = set(string.ascii_lowercase)
 
-def generate_pd_table(strings):
+def generate_pd_table(text):
     pd_table = {c: 0 for c in VALID_CHARS}
     num_characters = 0
-    for s in strings:
-        for c in s:
-            if c in VALID_CHARS:
-                num_characters += 1
-                pd_table[c] += 1
+    for line in text:
+        for word in line:
+            for c in word:
+                if c in VALID_CHARS:
+                    num_characters += 1
+                    pd_table[c] += 1
 
+    return {c: pd_table[c] / max(1, num_characters) for c in VALID_CHARS}
     return {c: pd_table[c] / max(1, num_characters) for c in VALID_CHARS}
 
 def print_pd_table(pd_table):
@@ -103,9 +105,12 @@ At a glance, it's easy to tell that some letters occur more frequently than othe
 
 {{< highlight python >}}
 def ingest_text(file_name):
+    text = []
     with open(file_name) as file:
-        strings = file.read().replace("\n", " ").split(" ")
-    return strings
+        lines = file.readlines()
+        for line in lines:
+            text.append(line.replace("\n", " ").replace("-", " ").split(" "))
+    return text
 {{< /highlight >}}
 
 ```
@@ -172,12 +177,92 @@ def entropy(s, pd_table):
 {{< /highlight>}}
 
 ```
->>> entropy("xywjz", pd_table)
-10649.261670477576
+>>> entropy("quux", pd_table)
+8013.109717001295
+
+>>> entropy("wysiwyg", pd_table)
+2552.1539238359765
+
+>>> entropy("elephant", pd_table)
+724.69216099031
+
 >>> entropy("apple", pd_table)
 518.3318569640584
+
+>>> entropy("appleapple", pd_table)
+1036.6637139281167
 ```
-A discerning eye can pinpoint
+Looking good! As expected, strings with a higher abundance of rarer characters like `q` and `w`, as well as longer character sequences `apple` vs `appleapple` are calculated to have higher overall entropy. Additionally, a discerning eye has no doubt already noticed a slight difference between our implementation and the equation for Shannon Entropy. In our implementation, we're using the inverse of $$P(x_i)$$ rather than $$P(x_i)$$ itself; this simply inverts the range of our outputs so that lower entropy strings tend towards zero, and higher entropy strings tend towards infinity. Ultimately, this is a relatively cosmetic change.
 
+### Using Entropy To Find Randomly Generated Strings
 
+Alright, with all of the legwork of calculating entropy behind us, let's try and use it to solve an actual problem that security minded software engineers face on a regular basis: randomly generated secrets such as SSH keys ending up in source control. If you work at a company that prides itself on always following the best, most secure engineering practices, then this may be a foreign issue to you; but a quick stroll through Github will reveal more than a [handful](https://github.com/dxa4481/truffleHog) of popular projects that aim to solve this problem. Offering a more personal perspective, I've encountered this issue frequently enough that it's warranted this very post that you are reading currently.
 
+To start, let's don our [deerstalker](https://en.wikipedia.org/wiki/Deerstalker) caps and tobacco pipes and see if we can use our entropy function to find randomly generated secrets that have been maliciously hidden within a copy of [*The Adventures of Sherlock Holmes*](https://www.gutenberg.org/ebooks/1661) from The Gutenberg Library. Within this text, I've hidden the following lines of text:
+
+```
+SECRET = pvreskzgoqrxyjfsqylc
+API_KEY = yyczyxcycyqyzxycqyzxc
+```
+
+For the sake of simplicity, I've taken the liberty of converting all of the text to lowercase, and removing all forms of punctuation, special characters and numbers. Ultimately, accounting for these different characters should prove little difficulty, and is something you should certainly take into account as real randomly generated secrets will almost certainly contain a mixture of lowercase, uppercase and numerical characters.
+
+{{< highlight python >}}
+VALID_CHARS = set(string.ascii_lowercase)
+
+def mung_word(word):
+    munged_word = []
+    for c in word.lower():
+        if c in VALID_CHARS:
+            munged_word.append(c)
+    return "".join(munged_word)
+
+def generate_entropies(text, pd_table):
+    entropies = {}
+    for i in range(len(text)):
+        for word in text[i]:
+            word = mung_word(word)
+            if word in entropies:
+                entropies[word]["locations"].append(i + 1)
+            else:
+                entropies[word] = {
+                    "entropy": entropy(word, pd_table),
+                    "locations": [i + 1]
+                }
+    return entropies
+
+def print_highest_entropies(entropies, amount=10):
+    sorted_entropies = [(word, entropies[word]["entropy"], entropies[word]["locations"])
+        for word in sorted(entropies.keys(),
+            key=lambda word: entropies[word]["entropy"],
+            reverse=True)
+    ]
+    num_entropies = min(amount, len(sorted_entropies))
+    for i in range(num_entropies):
+        print(f"{i + 1:<4}| {sorted_entropies[i][1]:<8.2f} | {sorted_entropies[i][0]:<30} | {sorted_entropies[i][2]}")
+
+{{</highlight>}}
+
+```
+>>> text = ingest_text("english.txt")
+
+>>> pd_table = generate_pd_table(text)
+
+>>> text = ingest_text("sherlock_holmes.txt")
+
+>>> entropies = generate_entropies(text, pd_table)
+
+>>> print_highest_entropies(entropies, 10)
+1   | 27337.20 | yyczyxcycyqyzxycqyzxc          | [9197]
+2   | 22826.51 | pvreskzgoqrxyjfsqylc           | [8675]
+3   | 8244.75  | exquisite                      | [9137]
+4   | 7148.93  | squeezed                       | [4703]
+5   | 7057.88  | jumpingwhich                   | [9720]
+6   | 6968.12  | jabez                          | [1152, 1195, 1227, 1266, 1401, 1489, 1600, 1704, 2116]
+7   | 6796.49  | jezail                         | [8803]
+8   | 6479.26  | quickly                        | [4524, 4956, 5500, 9873, 10972]
+9   | 6289.97  | disqualify                     | [1396]
+10  | 6252.42  | jewellery                      | [9906]
+```
+
+Huge success! Our program managed to pick out our randomly generated secrets with extreme confidence.
